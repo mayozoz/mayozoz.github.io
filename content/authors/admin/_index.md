@@ -1,17 +1,17 @@
 ---
 # Display name
-title: 吳健雄
+title: Mason Miller
 
 # Name pronunciation (optional)
-name_pronunciation: Chien Shiung Wu
+name_pronunciation: ""
 
 # Full name (for SEO)
-first_name: Shiung Wu
-last_name: Chien
+first_name: Mason
+last_name: Miller
 
 # Status emoji
 status:
-  icon: ☕️
+  icon: 🧑‍💻
 
 # Is this the primary user of the site?
 superuser: true
@@ -20,92 +20,66 @@ superuser: true
 highlight_name: true
 
 # Role/position/tagline
-role: Chief Scientist
+role: Research Assistant
 
 # Organizations/Affiliations to display in Biography blox
 organizations:
-  - name: OpenAI
-    url: https://openai.com/
+  - name: OrderLab
+    url: https://orderlab.io/
 
 # Social network links
 # Need to use another icon? Simply download the SVG icon to your `assets/media/icons/` folder.
 profiles:
   - icon: at-symbol
-    url: 'mailto:your-email@example.com'
+    url: "mailto:masonmil@umich.edu"
     label: E-mail Me
-  - icon: brands/x
-    url: https://twitter.com/GetResearchDev
-  - icon: brands/instagram
-    url: https://www.instagram.com/
   - icon: brands/github
-    url: https://github.com/gcushen
+    url: https://github.com/masonmill/
   - icon: brands/linkedin
-    url: https://www.linkedin.com/
-  - icon: academicons/google-scholar
-    url: https://scholar.google.com/
-  - icon: academicons/orcid
-    url: https://orcid.org/
+    url: https://www.linkedin.com/in/masonmil/
 
 interests:
-  - Artificial Intelligence
-  - Computational Linguistics
-  - Information Retrieval
+  - Operating Systems
+  - Distributed Systems
+  - Networking
 
 education:
-  - area: PhD Artificial Intelligence
-    institution: Stanford University
-    date_start: 2016-01-01
-    date_end: 2020-12-31
+  - area: BSc Computer Science
+    institution: University of Michigan
+    date_start: 2022-08-01
+    date_end: 2026-05-01
     summary: |
-      Thesis on _Why LLMs are awesome_. Supervised by [Prof Joe Smith](https://example.com). Presented papers at 5 IEEE conferences with the contributions being published in 2 Springer journals.
-    button:
-      text: 'Read Thesis'
-      url: 'https://example.com'
-  - area: MEng Artificial Intelligence
-    institution: Massachusetts Institute of Technology
-    date_start: 2016-01-01
-    date_end: 2020-12-31
-    summary: |
-      GPA: 3.8/4.0
+      GPA: 3.87/4.00
 
-      Courses included:
-      - lorem ipsum dolor sit amet, consectetur adipiscing elit
-      - lorem ipsum dolor sit amet, consectetur adipiscing elit
-      - lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - area: BSc Artificial Intelligence
-    institution: Massachusetts Institute of Technology
-    date_start: 2016-01-01
-    date_end: 2020-12-31
-    summary: |
-      GPA: 3.4/4.0
-      
-      Courses included:
-      - lorem ipsum dolor sit amet, consectetur adipiscing elit
-      - lorem ipsum dolor sit amet, consectetur adipiscing elit
-      - lorem ipsum dolor sit amet, consectetur adipiscing elit
+      Coursework:
+      - EECS 482: Operating Systems
+      - EECS 498: Advanced OS Projects
+      - EECS 485: Web Systems
+      - EECS 370: Intro to Computer Architecture
+      - EECS 376: Theory of Computer Science
+      - EECS 281: Data Structures and Algorithms
 work:
-  - position: Director of Cloud Infrastructure
-    company_name: GenCoin
-    company_url: ''
-    company_logo: ''
-    date_start: 2021-01-01
-    date_end: ''
-    summary: |2-
-      Responsibilities include:
-      - lorem ipsum dolor sit amet, consectetur adipiscing elit
-      - lorem ipsum dolor sit amet, consectetur adipiscing elit
-      - lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - position: Backend Software Engineer
-    company_name: X
-    company_url: ''
-    company_logo: ''
-    date_start: 2016-01-01
-    date_end: 2020-12-31
-    summary: |
-      Responsibilities include:
-      - Migrated infrastructure to a new data center
-      - lorem ipsum dolor sit amet, consectetur adipiscing elit
-      - lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - position: Research Assistant
+    company_name: OrderLab
+    company_url: "https://orderlab.io/"
+    company_logo: ""
+    date_start: 2024-05-01
+    date_end: ""
+    summary: ""
+  - position: Research Assistant
+    company_name: The Boyle Lab
+    company_url: "https://boylelab.org/"
+    company_logo: ""
+    date_start: 2023-05-01
+    date_end: 2023-09-01
+    summary: ""
+  - position: Computer Consultant
+    company_name: EECS DCO
+    company_url: "hhttps://www.eecs.umich.edu/dco/about.php"
+    company_logo: ""
+    date_start: 2022-06-01
+    date_end: 2023-05-01
+    summary: ""
 
 # Skills
 # Add your own SVG icons to `assets/media/icons/`
@@ -113,31 +87,31 @@ skills:
   - name: Technical Skills
     items:
       - name: Python
-        description: ''
+        description: ""
         percent: 80
         icon: code-bracket
       - name: Data Science
-        description: ''
+        description: ""
         percent: 100
         icon: chart-bar
       - name: SQL
-        description: ''
+        description: ""
         percent: 40
         icon: circle-stack
   - name: Hobbies
-    color: '#eeac02'
-    color_border: '#f0bf23'
+    color: "#eeac02"
+    color_border: "#f0bf23"
     items:
       - name: Hiking
-        description: ''
+        description: ""
         percent: 60
         icon: person-simple-walk
       - name: Cats
-        description: ''
+        description: ""
         percent: 100
         icon: cat
       - name: Photography
-        description: ''
+        description: ""
         percent: 80
         icon: camera
 
@@ -156,14 +130,14 @@ languages:
 awards:
   - title: Neural Networks and Deep Learning
     url: https://www.coursera.org/learn/neural-networks-deep-learning
-    date: '2023-11-25'
+    date: "2023-11-25"
     awarder: Coursera
     icon: coursera
     summary: |
       I studied the foundational concept of neural networks and deep learning. By the end, I was familiar with the significant technological trends driving the rise of deep learning; build, train, and apply fully connected deep neural networks; implement efficient (vectorized) neural networks; identify key parameters in a neural network’s architecture; and apply deep learning to your own applications.
   - title: Blockchain Fundamentals
     url: https://www.edx.org/professional-certificate/uc-berkeleyx-blockchain-fundamentals
-    date: '2023-07-01'
+    date: "2023-07-01"
     awarder: edX
     icon: edx
     summary: |
@@ -171,10 +145,10 @@ awards:
       - Synthesize your own blockchain solutions
       - Gain an in-depth understanding of the specific mechanics of Bitcoin
       - Understand Bitcoin’s real-life applications and learn how to attack and destroy Bitcoin, Ethereum, smart contracts and Dapps, and alternatives to Bitcoin’s Proof-of-Work consensus algorithm
-  - title: 'Object-Oriented Programming in R'
+  - title: "Object-Oriented Programming in R"
     url: https://www.datacamp.com/courses/object-oriented-programming-with-s3-and-r6-in-r
     certificate_url: https://www.datacamp.com
-    date: '2023-01-21'
+    date: "2023-01-21"
     awarder: datacamp
     icon: datacamp
     summary: |

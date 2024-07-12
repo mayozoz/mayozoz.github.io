@@ -86,18 +86,18 @@ work:
 skills:
   - name: Technical Skills
     items:
-      - name: Python
+      - name: C
+        description: ""
+        percent: 75
+        icon: devicon/c
+      - name: C++
         description: ""
         percent: 80
-        icon: code-bracket
-      - name: Data Science
+        icon: devicon/cplusplus
+      - name: Linux
         description: ""
-        percent: 100
-        icon: chart-bar
-      - name: SQL
-        description: ""
-        percent: 40
-        icon: circle-stack
+        percent: 60
+        icon: devicon/linux
   - name: Hobbies
     color: "#eeac02"
     color_border: "#f0bf23"

@@ -156,4 +156,4 @@ work:
 
 ## About Me
 
-Chien Shiung Wu is a professor of artificial intelligence at the Stanford AI Lab. Her research interests include distributed robotics, mobile computing and programmable matter. She leads the Robotic Neurobiology group, which develops self-reconfiguring robots, systems of self-organizing robots, and mobile sensor networks.
+Mason Miller is a student studying computer science at the University of Michigan in Ann Arbor. His academic interests include operating systems, distributed systems, and networking. He conducts operating systems research with The Ordered Systems Lab, aiming to enhance performance and efficiency in system-level programming.

@@ -51,10 +51,10 @@ education:
     summary: |
       Coursework:
       - EECS 370: Intro to Computer Architecture
-      - EECS 376: Theory of Computer Science
       - EECS 281: Data Structures and Algorithms
       - EECS 280: Programming and Intro Data Structures
       - EECS 203: Discrete Math
+      - STATS 250: Intro to Stats and Data Analysis
 work:
   - position: Operations Intern
     company_name: Tencent Cloud

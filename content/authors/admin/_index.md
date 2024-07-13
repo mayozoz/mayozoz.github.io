@@ -1,13 +1,13 @@
 ---
 # Display name
-title: Mason Miller
+title: Mei Yi Yang
 
 # Name pronunciation (optional)
 name_pronunciation: ""
 
 # Full name (for SEO)
-first_name: Mason
-last_name: Miller
+first_name: Mei Yi
+last_name: Yang
 
 # Status emoji
 status:
@@ -20,65 +20,48 @@ superuser: true
 highlight_name: true
 
 # Role/position/tagline
-role: Research Assistant
+role: Operations Intern
 
 # Organizations/Affiliations to display in Biography blox
 organizations:
-  - name: OrderLab
-    url: https://orderlab.io/
+  - name: Tencent Cloud
+    url: https://www.tencentcloud.com/
 
 # Social network links
 # Need to use another icon? Simply download the SVG icon to your `assets/media/icons/` folder.
 profiles:
   - icon: at-symbol
-    url: "mailto:masonmil@umich.edu"
+    url: "mailto:meiyy@umich.edu"
     label: E-mail Me
   - icon: brands/github
-    url: https://github.com/masonmill/
+    url: https://github.com/mayozoz/
   - icon: brands/linkedin
-    url: https://www.linkedin.com/in/masonmil/
+    url: https://www.linkedin.com/in/meiyy/
 
 interests:
-  - Operating Systems
-  - Distributed Systems
-  - Networking
+  - Dance
+  - League of Legends
+  - Snowboarding
 
 education:
-  - area: BSc Computer Science
+  - area: BSE Computer Science
     institution: University of Michigan
-    date_start: 2022-08-01
-    date_end: 2026-05-01
+    date_start: 2023-08-01
+    date_end: 2027-05-01
     summary: |
-      GPA: 3.87/4.00
-
       Coursework:
-      - EECS 482: Operating Systems
-      - EECS 498: Advanced OS Projects
-      - EECS 485: Web Systems
       - EECS 370: Intro to Computer Architecture
       - EECS 376: Theory of Computer Science
       - EECS 281: Data Structures and Algorithms
+      - EECS 280: Programming and Intro Data Structures
+      - EECS 203: Discrete Math
 work:
-  - position: Research Assistant
-    company_name: OrderLab
-    company_url: "https://orderlab.io/"
+  - position: Operations Intern
+    company_name: Tencent Cloud
+    company_url: "https://www.tencentcloud.com/"
     company_logo: ""
     date_start: 2024-05-01
-    date_end: ""
-    summary: ""
-  - position: Research Assistant
-    company_name: The Boyle Lab
-    company_url: "https://boylelab.org/"
-    company_logo: ""
-    date_start: 2023-05-01
-    date_end: 2023-09-01
-    summary: ""
-  - position: Computer Consultant
-    company_name: EECS DCO
-    company_url: "hhttps://www.eecs.umich.edu/dco/about.php"
-    company_logo: ""
-    date_start: 2022-06-01
-    date_end: 2023-05-01
+    date_end: 2024-07-01
     summary: ""
 # Skills
 # Add your own SVG icons to `assets/media/icons/`
@@ -156,4 +139,4 @@ work:
 
 ## About Me
 
-Mason Miller is a student studying computer science at the University of Michigan in Ann Arbor. His academic interests include operating systems, distributed systems, and networking. He conducts operating systems research with The Ordered Systems Lab, aiming to enhance performance and efficiency in system-level programming.
+Mei Yi Yang is a motivated, second-year student studying computer science at the University of Michigan in Ann Arbor. She currently works as an Operations Intern at Tencent Cloud, where she develops strategic solutions to increase cloud product gross margins and utilizes AI tools to improve operational efficiency for the CSIG Cloud Product Department.

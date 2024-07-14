@@ -26,7 +26,7 @@ sections:
           # Add your image background to `assets/media/`.
           filename: banner.png
           filters:
-            brightness: 0.5
+            brightness: 0.40
           size: cover
           position: center
           parallax: true

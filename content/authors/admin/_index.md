@@ -139,4 +139,4 @@ work:
 
 ## About Me
 
-Mei Yi Yang is a motivated, second-year student studying computer science at the University of Michigan in Ann Arbor. She currently works as an Operations Intern at Tencent Cloud, where she develops strategic solutions to increase cloud product gross margins and utilizes AI tools to improve operational efficiency for the CSIG Cloud Product Department.
+Mei Yi Yang is a motivated, second-year student studying computer science at the University of Michigan in Ann Arbor. She previously worked as an Operations Intern at Tencent Cloud, where she developed strategic solutions to increase cloud product gross margins and utilized AI tools to improve operational efficiency for the CSIG Cloud Product Department.

@@ -12,9 +12,8 @@ export default function VideoCarousel() {
   const [direction, setDirection] = useState(1);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Track YouTube player state without causing re-renders
-  const isPlayingRef = useRef(false);
-  const waitingRef = useRef(false); // timer fired while video was playing
+  // True once the user clicks into the iframe — stops auto-advance until they navigate manually
+  const pausedRef = useRef(false);
   const activeRef = useRef(0);
   activeRef.current = active;
 
@@ -24,47 +23,33 @@ export default function VideoCarousel() {
     setActive(nextIdx);
   }, []);
 
-  // Keep a stable ref so the message handler can call the latest version
   const goNextRef = useRef(goNext);
   goNextRef.current = goNext;
 
-  // Listen for YouTube player state via postMessage (requires enablejsapi=1)
+  // window.blur fires when the iframe captures focus (user clicked the video)
   useEffect(() => {
-    const handleMessage = (e: MessageEvent) => {
-      try {
-        const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-        if (data.event !== "onStateChange") return;
-        // YouTube states: -1 unstarted, 0 ended, 1 playing, 2 paused, 3 buffering
-        isPlayingRef.current = data.info === 1;
-        if (!isPlayingRef.current && waitingRef.current) {
-          // Video stopped while we were waiting to advance — go now
-          waitingRef.current = false;
-          goNextRef.current();
-        }
-      } catch {}
+    const onBlur = () => {
+      pausedRef.current = true;
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
     };
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
+    window.addEventListener("blur", onBlur);
+    return () => window.removeEventListener("blur", onBlur);
   }, []);
 
-  // Reset play state when slide changes (new iframe, fresh state)
+  // Restart the auto-advance timer whenever the active slide changes
   useEffect(() => {
-    isPlayingRef.current = false;
-    waitingRef.current = false;
-
     if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => {
-      if (isPlayingRef.current) {
-        waitingRef.current = true; // hold until video stops
-      } else {
-        goNextRef.current();
-      }
-    }, AUTOPLAY_INTERVAL);
+    if (pausedRef.current) return;
 
+    timerRef.current = setTimeout(goNextRef.current, AUTOPLAY_INTERVAL);
     return () => { if (timerRef.current) clearTimeout(timerRef.current); };
   }, [active]);
 
   const go = (idx: number) => {
+    pausedRef.current = false; // manual navigation resumes auto-advance
     setDirection(idx > active ? 1 : -1);
     setActive(idx);
   };
@@ -154,7 +139,7 @@ export default function VideoCarousel() {
             />
           ))}
         </div>
-        <button onClick={goNext} className="text-[#1a3326]/40 hover:text-[#1a3326] transition-colors text-lg" aria-label="Next">→</button>
+        <button onClick={() => go((active + 1) % videoProjects.length)} className="text-[#1a3326]/40 hover:text-[#1a3326] transition-colors text-lg" aria-label="Next">→</button>
       </div>
     </section>
   );

@@ -14,12 +14,13 @@ import { SkeletonUtils } from "three-stdlib";
 import * as THREE from "three";
 
 const SPACING = 2.4;
+const OFFSET = ((7 - 1) / 2) * SPACING; // 7.2, derived from models.length
 
 type AnimMode =
-  | { type: "cycle" }               // play all animations in sequence, LoopOnce each
-  | { type: "loop"; name: string }  // loop one specific animation
-  | { type: "first" }               // loop the first animation (default)
-  | { type: "none" }                // no animation — slow Y rotation
+  | { type: "cycle" }
+  | { type: "loop"; name: string }
+  | { type: "first" }
+  | { type: "none" }
 
 const models = [
   { file: "dew-drop_character.glb",    name: "Dew Drop",   scaleMult: 1.0, anim: { type: "cycle" } as AnimMode },
@@ -31,8 +32,8 @@ const models = [
   { file: "daily_model_2025-10-15.glb", name: "Regen Pot",  scaleMult: 1.0, anim: { type: "none" } as AnimMode },
 ];
 
-const CAMERA_MIN_X = -((models.length - 1) / 2) * SPACING;
-const CAMERA_MAX_X =  ((models.length - 1) / 2) * SPACING;
+const CAMERA_MIN_X = -OFFSET;
+const CAMERA_MAX_X =  OFFSET;
 
 function Model({ file, scaleMult, anim }: { file: string; scaleMult: number; anim: AnimMode }) {
   const { scene: rawScene, animations } = useGLTF(`/glb_models/${file}`);
@@ -59,7 +60,6 @@ function Model({ file, scaleMult, anim }: { file: string; scaleMult: number; ani
     });
   }, [scene]);
 
-  // Cycle mode: play each animation once in sequence, advance on finish
   const cycleIndexRef = useRef(0);
   useEffect(() => {
     if (anim.type !== "cycle" || !names.length || !mixer) return;
@@ -82,7 +82,6 @@ function Model({ file, scaleMult, anim }: { file: string; scaleMult: number; ani
     };
   }, [anim.type, actions, names, mixer]);
 
-  // Loop a specific named animation
   useEffect(() => {
     if (anim.type !== "loop") return;
     const a = actions[(anim as { type: "loop"; name: string }).name];
@@ -91,7 +90,6 @@ function Model({ file, scaleMult, anim }: { file: string; scaleMult: number; ani
     return () => { a.fadeOut(0.3); };
   }, [anim, actions]);
 
-  // Loop first animation (default for fish, bunny)
   useEffect(() => {
     if (anim.type !== "first" || !names.length) return;
     const a = actions[names[0]];
@@ -118,12 +116,14 @@ function Pedestal({
   modelData,
   index,
   activeIndex,
+  loaded,
   onClick,
 }: {
   position: [number, number, number];
   modelData: (typeof models)[0];
   index: number;
   activeIndex: number | null;
+  loaded: boolean;
   onClick: (i: number) => void;
 }) {
   const isActive = activeIndex === index;
@@ -161,9 +161,11 @@ function Pedestal({
         onClick={(e) => { e.stopPropagation(); onClick(index); }}
       >
         <Float speed={1.2} floatIntensity={isActive ? 0.5 : 0.2} rotationIntensity={0.05}>
-          <Suspense fallback={null}>
-            <Model file={modelData.file} scaleMult={modelData.scaleMult} anim={modelData.anim} />
-          </Suspense>
+          {loaded && (
+            <Suspense fallback={null}>
+              <Model file={modelData.file} scaleMult={modelData.scaleMult} anim={modelData.anim} />
+            </Suspense>
+          )}
         </Float>
       </group>
 
@@ -212,7 +214,24 @@ function GalleryFloor() {
 
 function GalleryContent({ targetX }: { targetX: number }) {
   const [active, setActive] = useState<number | null>(null);
-  const offset = ((models.length - 1) / 2) * SPACING;
+
+  // Track which model indices have ever been within view — once loaded, stay loaded
+  const [loadedIndices, setLoadedIndices] = useState<Set<number>>(() => new Set([2, 3, 4]));
+
+  const centerIndex = Math.round((targetX + OFFSET) / SPACING);
+
+  useEffect(() => {
+    const lo = Math.max(0, centerIndex - 1);
+    const hi = Math.min(models.length - 1, centerIndex + 1);
+    setLoadedIndices((prev) => {
+      let changed = false;
+      const next = new Set(prev);
+      for (let i = lo; i <= hi; i++) {
+        if (!next.has(i)) { next.add(i); changed = true; }
+      }
+      return changed ? next : prev;
+    });
+  }, [centerIndex]);
 
   return (
     <>
@@ -225,10 +244,11 @@ function GalleryContent({ targetX }: { targetX: number }) {
       {models.map((m, i) => (
         <Pedestal
           key={m.file}
-          position={[i * SPACING - offset, 0, 0]}
+          position={[i * SPACING - OFFSET, 0, 0]}
           modelData={m}
           index={i}
           activeIndex={active}
+          loaded={loadedIndices.has(i)}
           onClick={(idx) => setActive(active === idx ? null : idx)}
         />
       ))}
@@ -238,13 +258,22 @@ function GalleryContent({ targetX }: { targetX: number }) {
 
 export default function GalleryScene() {
   const [targetX, setTargetX] = useState(0);
+  const [inView, setInView] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const pan = (dir: -1 | 1) => {
-    setTargetX((x) => Math.max(CAMERA_MIN_X, Math.min(CAMERA_MAX_X, x + dir * SPACING)));
-  };
+  // Don't mount the Canvas until the section scrolls near the viewport
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setInView(true); },
+      { rootMargin: "300px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
-  // wheel on the canvas wrapper pans left/right
+  // Wheel panning
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -268,9 +297,8 @@ export default function GalleryScene() {
       </p>
 
       <div className="relative">
-        {/* left arrow */}
         <button
-          onClick={() => pan(-1)}
+          onClick={() => setTargetX((x) => Math.max(CAMERA_MIN_X, x - SPACING))}
           disabled={atStart}
           className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 z-10 w-9 h-9 flex items-center justify-center glass rounded-full text-[#1a3326]/50 hover:text-[#1a3326] disabled:opacity-20 transition-all"
           aria-label="Scroll left"
@@ -279,19 +307,26 @@ export default function GalleryScene() {
         </button>
 
         <div ref={containerRef} className="glass rounded-2xl overflow-hidden" style={{ height: 420 }}>
-          <Canvas
-            camera={{ position: [0, 1.2, 5.5], fov: 45 }}
-            shadows
-            gl={{ antialias: true }}
-            style={{ background: "transparent" }}
-          >
-            <GalleryContent targetX={targetX} />
-          </Canvas>
+          {inView ? (
+            <Canvas
+              camera={{ position: [0, 1.2, 5.5], fov: 45 }}
+              shadows
+              gl={{ antialias: true }}
+              style={{ background: "transparent" }}
+            >
+              <GalleryContent targetX={targetX} />
+            </Canvas>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <span className="text-xs tracking-[0.25em] uppercase text-[#1a3326]/25" style={{ fontFamily: "var(--font-mono)" }}>
+                loading models
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* right arrow */}
         <button
-          onClick={() => pan(1)}
+          onClick={() => setTargetX((x) => Math.min(CAMERA_MAX_X, x + SPACING))}
           disabled={atEnd}
           className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 z-10 w-9 h-9 flex items-center justify-center glass rounded-full text-[#1a3326]/50 hover:text-[#1a3326] disabled:opacity-20 transition-all"
           aria-label="Scroll right"

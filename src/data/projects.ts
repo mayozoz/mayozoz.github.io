@@ -47,7 +47,7 @@ export const projects: Project[] = [
     tags: ["game dev"],
     youtubeId: "4JFVmsvJ1To",
     description:
-      "Built a small 2D game engine in C++ over a semester using SDL for rendering, input, and audio; Lua and LuaBridge for gameplay scripting; RapidJSON for scene and data loading; Box2D for physics; and GLM for math. The engine supports scene files, actor templates, component-based behaviors, image and text rendering, audio playback, input handling, events, and physics-backed gameplay objects. Used it to ship small playable games with multiple scenes, reusable scripted components, custom assets, and platform-ready packaged builds. The custom feature I designed and implemented was Persistent World Timers and Offline Simulation — a persistence layer in C++ that lets Lua scripts save and load structured game state as JSON, combined with a real-world time API exposing Unix timestamps to gameplay code. That makes it possible for timed systems to continue progressing even while the game is closed. To demo it, I built a bakery mini-game where a blueberry bagel proofs, bakes through multiple visual stages, and can burn if left too long — and closing and reopening the game during the oven phase still advances the bagel correctly based on real elapsed time.",
+      "Built a small 2D game engine in C++ over a semester using SDL for rendering, input, and audio; Lua and LuaBridge for gameplay scripting; RapidJSON for scene and data loading; Box2D for physics; and GLM for math. The engine supports scene files, actor templates, component-based behaviors, image and text rendering, audio playback, input handling, events, and physics-backed gameplay objects. Used it to ship small playable games with multiple scenes, reusable scripted components, custom assets, and platform-ready packaged builds. The custom feature I designed and implemented was Persistent World Timers and Offline Simulation — a persistence layer in C++ that lets Lua scripts save and load structured game state as JSON, combined with a real-world time API exposing Unix timestamps to gameplay code. That makes it possible for timed systems to continue progressing even while the game is closed. To demo it, I built a Lua-coded bakery mini-game called \"one blueberry bagel please\" where a blueberry bagel proofs, bakes through multiple visual stages, and can burn if left too long — and closing and reopening the game during the oven phase still advances the bagel correctly based on real elapsed time. The video demonstrates this custom feature only, not the full engine.",
     stack: ["C++", "SDL2", "Lua", "LuaBridge", "Box2D", "RapidJSON", "GLM"],
     highlights: [
       "3,400+ lines across 10 engine systems",
@@ -102,8 +102,8 @@ export const projects: Project[] = [
     stack: ["React", "TypeScript", "Node.js", "Express", "SQLite", "Chrome APIs"],
   },
   {
-    slug: "pricehound",
-    title: "PriceHound",
+    slug: "blubriBuy",
+    title: "BlubriBuy",
     oneliner: "Chrome extension that tracks price history on luxury fashion items.",
     tags: ["web"],
     description:

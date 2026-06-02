@@ -102,8 +102,8 @@ export const projects: Project[] = [
     stack: ["React", "TypeScript", "Node.js", "Express", "SQLite", "Chrome APIs"],
   },
   {
-    slug: "blubriBuy",
-    title: "BlubriBuy",
+    slug: "bluberiBuy",
+    title: "BluberiBuy",
     oneliner: "Chrome extension that tracks price history on luxury fashion items.",
     tags: ["web"],
     description:

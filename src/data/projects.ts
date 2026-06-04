@@ -19,7 +19,7 @@ export const projects: Project[] = [
     title: "Bubble",
     oneliner: "End-to-end AI character pipeline — from 2D concept to rigged 3D model with cinematic trailer.",
     tags: ["ai production", "3d"],
-    youtubeId: "G4U_YzfQDCc",
+    // youtubeId: "G4U_YzfQDCc",
     description:
       "Solo project spanning concept, direction, production, and post. Wrote a 7-scene cinematic script, benchmarked three image-to-video models for stylized anime output (Wan 2.2, Kling 3.0, Seedance), and built reproducible ComfyUI workflows with seed locking for cross-clip character consistency. Debugged FP8 quantization on Apple Silicon, prompt-tuned TTS dialogue delivery, converted a 2D concept to a rigged 3D character via Meshy, and composited a ~35-second trailer with a custom soundtrack and typographic title sequence.",
     stack: ["ComfyUI", "Wan 2.2", "Kling 3.0 Omni", "Seedance 1.5", "ElevenLabs", "Meshy AI", "Blender", "DaVinci Resolve"],

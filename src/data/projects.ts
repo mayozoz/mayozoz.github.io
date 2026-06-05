@@ -109,6 +109,7 @@ export const projects: Project[] = [
     description:
       "Desktop price tracker for luxury fashion sites (SSENSE, The RealReal). Monitors price history, sends desktop notifications on drops, and sets target price alerts. Features price sparkline charts, badge counts, inventory status tracking, per-site configuration, and automatic background checks. Built to scratch a personal itch.",
     stack: ["JavaScript", "Chrome APIs", "Manifest V3"],
+    links: [{ label: "Chrome Web Store", href: "https://chromewebstore.google.com/detail/hebofgjcejgihignpbijmoicklaopijb?utm_source=item-share-cb" }],
   },
 ];
 

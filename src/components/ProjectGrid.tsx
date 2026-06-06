@@ -21,7 +21,9 @@ export default function ProjectGrid() {
         {staticProjects.map((project) => (
           <Link
             key={project.slug}
-            href={`/work/${project.slug}`}
+            href={project.externalUrl ?? `/work/${project.slug}`}
+            target={project.externalUrl ? "_blank" : undefined}
+            rel={project.externalUrl ? "noopener noreferrer" : undefined}
             className="group glass rounded-xl p-5 flex flex-col gap-3 hover:shadow-md transition-all duration-300 hover:translate-y-[-2px]"
           >
             <div className="flex flex-wrap gap-1.5">

@@ -9,6 +9,7 @@ export interface Project {
   thumbnail?: string;
   description: string;
   stack: string[];
+  externalUrl?: string;
   links?: { label: string; href: string }[];
   highlights?: string[];
 }
@@ -21,6 +22,7 @@ export const projects: Project[] = [
     tags: ["web"],
     description:
       "Price tracker for luxury fashion sites (SSENSE, The RealReal, Fashionphile). One-click tracking from any supported product page, full price history with sparkline charts, high/low watermarks, and a buy-now-or-wait verdict. Background checks every 1–24 hours with browser notifications for price drops, inventory changes, and target prices. Email alerts via EmailJS — no backend or subscription required. Organize tracked items into folders by site or custom collection with drag-and-drop. All data stored locally; no accounts, no servers, no tracking. Built to scratch a personal itch.",
+    externalUrl: "https://mayozoz.github.io/BluberiBuy/",
     stack: ["JavaScript", "Chrome APIs", "Manifest V3", "EmailJS"],
     links: [{ label: "Chrome Web Store", href: "https://chromewebstore.google.com/detail/hebofgjcejgihignpbijmoicklaopijb?utm_source=item-share-cb" }],
   },

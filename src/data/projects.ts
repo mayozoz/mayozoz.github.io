@@ -15,20 +15,14 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    slug: "bubble",
-    title: "Bubble",
-    oneliner: "End-to-end AI character pipeline — from 2D concept to rigged 3D model with cinematic trailer.",
-    tags: ["ai production", "3d"],
-    // youtubeId: "G4U_YzfQDCc",
+    slug: "bluberiBuy",
+    title: "BluberiBuy",
+    oneliner: "Chrome extension that tracks price history on luxury fashion items.",
+    tags: ["web"],
     description:
-      "Solo project spanning concept, direction, production, and post. Wrote a 7-scene cinematic script, benchmarked three image-to-video models for stylized anime output (Wan 2.2, Kling 3.0, Seedance), and built reproducible ComfyUI workflows with seed locking for cross-clip character consistency. Debugged FP8 quantization on Apple Silicon, prompt-tuned TTS dialogue delivery, converted a 2D concept to a rigged 3D character via Meshy, and composited a ~35-second trailer with a custom soundtrack and typographic title sequence.",
-    stack: ["ComfyUI", "Wan 2.2", "Kling 3.0 Omni", "Seedance 1.5", "ElevenLabs", "Meshy AI", "Blender", "DaVinci Resolve"],
-    highlights: [
-      "AI tools require creative direction more than technical fluency to produce coherent output",
-      "Cross-tool consistency (same seed, same reference image) is the gap between AI demo and produced piece",
-      "The bottleneck in AI production is evaluation and selection, not generation",
-      "Hardware/format compatibility (FP8, MPS) determines tool choice as much as quality does",
-    ],
+      "Desktop price tracker for luxury fashion sites (SSENSE, The RealReal). Monitors price history, sends desktop notifications on drops, and sets target price alerts. Features price sparkline charts, badge counts, inventory status tracking, per-site configuration, and automatic background checks. Built to scratch a personal itch.",
+    stack: ["JavaScript", "Chrome APIs", "Manifest V3"],
+    links: [{ label: "Chrome Web Store", href: "https://chromewebstore.google.com/detail/hebofgjcejgihignpbijmoicklaopijb?utm_source=item-share-cb" }],
   },
   {
     slug: "perfume",
@@ -100,16 +94,6 @@ export const projects: Project[] = [
     description:
       "Customizable daily-notes app as a Chrome extension with a Node/Express backend and SQLite database. Contenteditable editor with custom fonts, color themes, styled backgrounds (dotted/lined/grid), and 500ms debounce autosave. Daily reset with a 'keep yesterday / start fresh' modal. Built to learn full-stack TypeScript and Chrome extension architecture.",
     stack: ["React", "TypeScript", "Node.js", "Express", "SQLite", "Chrome APIs"],
-  },
-  {
-    slug: "bluberiBuy",
-    title: "BluberiBuy",
-    oneliner: "Chrome extension that tracks price history on luxury fashion items.",
-    tags: ["web"],
-    description:
-      "Desktop price tracker for luxury fashion sites (SSENSE, The RealReal). Monitors price history, sends desktop notifications on drops, and sets target price alerts. Features price sparkline charts, badge counts, inventory status tracking, per-site configuration, and automatic background checks. Built to scratch a personal itch.",
-    stack: ["JavaScript", "Chrome APIs", "Manifest V3"],
-    links: [{ label: "Chrome Web Store", href: "https://chromewebstore.google.com/detail/hebofgjcejgihignpbijmoicklaopijb?utm_source=item-share-cb" }],
   },
 ];
 

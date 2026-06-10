@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ProjectGrid from "@/components/ProjectGrid";
-import { LotusHero, GalleryScene, VideoCarousel } from "@/components/DynamicSections";
+import SkillsSection from "@/components/SkillsSection";
+import { LotusHero, GalleryScene } from "@/components/DynamicSections";
 
 export default function Home() {
   return (
@@ -13,29 +14,20 @@ export default function Home() {
         >
           mayozoz
         </span>
-        <div className="flex gap-6">
-          {[
-            { href: "#work", label: "work" },
-            { href: "#models", label: "3d" },
-            { href: "/about", label: "about" },
-          ].map(({ href, label }) => (
-            <a
-              key={label}
-              href={href}
-              className="text-xs tracking-[0.2em] uppercase text-[#1a3326]/40 hover:text-[#1a3326] transition-colors"
-              style={{ fontFamily: "var(--font-mono)" }}
-            >
-              {label}
-            </a>
-          ))}
-        </div>
+        <Link
+          href="/contact"
+          className="text-xs tracking-[0.2em] uppercase text-[#1a3326]/40 hover:text-[#1a3326] transition-colors"
+          style={{ fontFamily: "var(--font-mono)" }}
+        >
+          contact me
+        </Link>
       </nav>
 
       {/* hero */}
       <section className="w-full max-w-3xl mx-auto px-6 pt-10 pb-4 flex flex-col items-center text-center gap-2">
         <h1
-          className="text-6xl md:text-8xl font-light leading-[1.0] text-[#1a3326]"
-          style={{ fontFamily: "var(--font-display)" }}
+          className="text-6xl md:text-8xl leading-[1.0] text-[#3a3735]"
+          style={{ fontFamily: "var(--font-name)" }}
         >
           Mei Yi Yang
         </h1>
@@ -49,8 +41,8 @@ export default function Home() {
           className="text-xs leading-relaxed text-[#1a3326]/50 max-w-xs mt-1"
           style={{ fontFamily: "var(--font-mono)" }}
         >
-          CS-trained creative technologist. I hand-model 3D characters, build
-          games from the ground up, and direct end-to-end AI production pipelines.
+          CS student at the University of Michigan. I build iOS apps, game
+          engines, AI systems, and research tools. I like shipping finished things.
         </p>
         <div className="flex flex-wrap justify-center gap-5 pt-1">
           <a
@@ -72,6 +64,15 @@ export default function Home() {
             linkedin ↗
           </a>
           <a
+            href="https://runnyeggpie.itch.io/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            itch.io ↗
+          </a>
+          <a
             href="mailto:mei.yang0508@gmail.com"
             className="text-[11px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
             style={{ fontFamily: "var(--font-mono)" }}
@@ -87,12 +88,17 @@ export default function Home() {
       </div>
 
       {/* video carousel */}
-      <div id="work" className="w-full">
+      {/* <div id="work" className="w-full">
         <VideoCarousel />
-      </div>
+      </div> */}
 
       {/* static project grid */}
-      <ProjectGrid />
+      <div id="work" className="w-full">
+        <ProjectGrid />
+      </div>
+
+      {/* skills */}
+      <SkillsSection />
 
       {/* 3d gallery */}
       <div id="models" className="w-full">

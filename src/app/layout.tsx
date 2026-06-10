@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, DM_Mono } from "next/font/google";
+import { Cormorant_Garamond, DM_Mono, Italiana } from "next/font/google";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
+});
+
+const italiana = Italiana({
+  variable: "--font-name",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 const dmMono = DM_Mono({
@@ -24,7 +30,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${dmMono.variable} h-full`}>
+    <html lang="en" className={`${cormorant.variable} ${dmMono.variable} ${italiana.variable} h-full`}>
       <body className="min-h-full flex flex-col bg-[#f0f7f4] text-[#1a3326]" suppressHydrationWarning>
         {children}
       </body>

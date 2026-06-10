@@ -115,7 +115,7 @@ export const projects: Project[] = [
   },
   {
     slug: "rws",
-    title: "Radiation Weather Station",
+    title: "Radiological Health Engineering Lab",
     oneliner: "Live radiation and weather monitoring dashboard for U of M's engineering lab.",
     tags: ["web"],
     category: "experience",

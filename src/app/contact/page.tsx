@@ -2,24 +2,27 @@
 
 import { useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import { sendContactEmail } from "./actions";
+
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
 
 export default function ContactPage() {
   const formRef = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
-  const [errorMsg, setErrorMsg] = useState("");
   const [isPending, startTransition] = useTransition();
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(new FormData(e.currentTarget));
     startTransition(async () => {
-      const result = await sendContactEmail(formData);
-      if (result.success) {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
         setStatus("success");
         formRef.current?.reset();
       } else {
-        setErrorMsg(result.error ?? "Something went wrong.");
         setStatus("error");
       }
     });
@@ -134,7 +137,7 @@ export default function ContactPage() {
 
             {status === "error" && (
               <p className="text-[11px] text-red-400" style={{ fontFamily: "var(--font-mono)" }}>
-                {errorMsg}
+                Something went wrong. Please try again.
               </p>
             )}
 

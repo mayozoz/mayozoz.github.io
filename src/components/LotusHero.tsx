@@ -200,7 +200,7 @@ export default function LotusHero() {
           className="text-xs tracking-[0.22em] uppercase text-[#1a3326]/55"
           style={{ fontFamily: "var(--font-mono)" }}
         >
-          browse 3d models
+          view resume
         </span>
       </div>
     </div>

@@ -32,8 +32,8 @@ export default function Home() {
           Mei Yi Yang
         </h1>
 
-        {/* lotus — centered, fills max-w-3xl, linked to gallery */}
-        <Link href="/gallery" className="w-full block mt-2">
+        {/* lotus — centered, fills max-w-3xl, links to resume */}
+        <Link href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="w-full block mt-2">
           <LotusHero />
         </Link>
 

@@ -116,14 +116,19 @@ export const projects: Project[] = [
   {
     slug: "rws",
     title: "Radiological Health Engineering Lab",
-    oneliner: "Live radiation and weather monitoring dashboard for U of M's engineering lab.",
+    oneliner: "Rebuilt a Raspberry Pi radiation-detector dashboard as a React SPA, replacing the legacy interface used by lab researchers.",
     tags: ["web"],
     category: "experience",
     period: "May 2026 – Present",
     description:
-      "Public-facing dashboard for the Radiological Health Engineering Lab (RHELab) at the University of Michigan. Displays real-time sensor data from the RWS-Lite network for high schoolers and the general public. Built as a modern React/Next.js frontend on top of a WordPress + Python backend, deployed to production on Pantheon.",
-    stack: ["Next.js", "TypeScript", "Radix UI", "Tailwind CSS", "WordPress", "Pantheon"],
+      "Rebuilt the Radiological Health Engineering Lab's Raspberry Pi radiation-detector dashboard as a React SPA with live recording charts, calibration workflows, and CSV/data download, replacing the legacy interface used by lab researchers. Diagnosed a production data-corruption bug by tracing malformed GPS entries to stray hotspot traffic hitting the Flask backend's catch-all route, restoring data integrity across all device recordings. Also built a REST proxy and TypeScript parsing layer connecting a WordPress-hosted public dashboard to a weather/radiation station's sensor API, normalizing hardware sentinel values with fallback handling for reliable live display.",
+    stack: ["React", "Vite", "Flask", "Python", "TypeScript", "Next.js", "MUI", "Plotly.js", "WordPress REST API"],
     links: [{ label: "Live site", href: "https://rws.engin.umich.edu/" }],
+    highlights: [
+      "Rebuilt legacy Pi dashboard as a React SPA with live charts, calibration workflows, and CSV export",
+      "Diagnosed and fixed a production data-corruption bug from malformed GPS entries",
+      "REST proxy + TypeScript parsing layer bridging WordPress and sensor hardware APIs",
+    ],
   },
   {
     slug: "youdao",

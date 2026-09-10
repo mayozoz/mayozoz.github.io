@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ProjectGrid from "@/components/ProjectGrid";
+import GameDevSection from "@/components/GameDevSection";
 import SkillsSection from "@/components/SkillsSection";
 import { LotusHero, GalleryScene } from "@/components/DynamicSections";
 
@@ -95,6 +96,11 @@ export default function Home() {
       {/* static project grid */}
       <div id="work" className="w-full">
         <ProjectGrid />
+      </div>
+
+      {/* game dev */}
+      <div id="game-dev" className="w-full">
+        <GameDevSection />
       </div>
 
       {/* skills */}

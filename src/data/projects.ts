@@ -15,6 +15,8 @@ export interface Project {
   externalUrl?: string;
   links?: { label: string; href: string }[];
   highlights?: string[];
+  playUrl?: string;
+  mediaNote?: string;
 }
 
 export const projects: Project[] = [
@@ -85,9 +87,11 @@ export const projects: Project[] = [
     tags: ["game dev"],
     category: "projects",
     youtubeId: "4JFVmsvJ1To",
+    mediaNote: "The video and download are a small demo game built with the engine, not the engine itself.",
     description:
       "Built a small 2D game engine in C++ over a semester using SDL for rendering, input, and audio; Lua and LuaBridge for gameplay scripting; RapidJSON for scene and data loading; Box2D for physics; and GLM for math. The engine supports scene files, actor templates, component-based behaviors, image and text rendering, audio playback, input handling, events, and physics-backed gameplay objects. Used it to ship small playable games with multiple scenes, reusable scripted components, custom assets, and platform-ready packaged builds. The custom feature I designed and implemented was Persistent World Timers and Offline Simulation — a persistence layer in C++ that lets Lua scripts save and load structured game state as JSON, combined with a real-world time API exposing Unix timestamps to gameplay code. That makes it possible for timed systems to continue progressing even while the game is closed. To demo it, I built a Lua-coded bakery mini-game called \"one blueberry bagel please\" where a blueberry bagel proofs, bakes through multiple visual stages, and can burn if left too long — and closing and reopening the game during the oven phase still advances the bagel correctly based on real elapsed time. The video demonstrates this custom feature only, not the full engine.",
     stack: ["C++", "SDL2", "Lua", "LuaBridge", "Box2D", "RapidJSON", "GLM"],
+    links: [{ label: "Download demo on itch.io", href: "https://runnyeggpie.itch.io/one-blueberry-bagel-pls" }],
     highlights: [
       "3,400+ lines across 10 engine systems",
       "Lua scripting layer — game logic fully decoupled from engine code",
@@ -105,6 +109,7 @@ export const projects: Project[] = [
     description:
       "Designed and built a complete 3D adventure game in Unity with a custom character controller, state-machine animation system, inventory mechanics, and branching narrative. Features 10+ minutes of gameplay, 2 playable characters (a dew drop with a notoriously jiggly butt and a rolling pebble with a leaf on his head), and fully modeled environments. The goal is to climb out of a red boot by feeding light objects to a vine in a pot. The vine has a custom physics system with z-axis locking on certain sections and skill-based climbing on others. Max inventory of 3 lights. Two interactable NPCs — one kills you on contact, the other releases fog. Calm, cozy vibes throughout.",
     stack: ["Unity", "C#", "Blender"],
+    playUrl: "https://eecs298.com/student_data/meiyy/the%20boot/builds/2025_12_08_16_40_19/index.html",
     links: [{ label: "Play on itch.io", href: "https://runnyeggpie.itch.io/the-boot" }],
     highlights: [
       "2 playable characters with distinct movement feel",

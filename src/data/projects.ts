@@ -17,6 +17,7 @@ export interface Project {
   highlights?: string[];
   playUrl?: string;
   mediaNote?: string;
+  samples?: { label: string; href: string; image: string; description: string }[];
 }
 
 export const projects: Project[] = [
@@ -133,6 +134,22 @@ export const projects: Project[] = [
       "Rebuilt legacy Pi dashboard as a React SPA with live charts, calibration workflows, and CSV export",
       "Diagnosed and fixed a production data-corruption bug from malformed GPS entries",
       "REST proxy + TypeScript parsing layer bridging WordPress and sensor hardware APIs",
+    ],
+    samples: [
+      {
+        label: "RWS-Lite Dashboard",
+        href: "PLACEHOLDER_RWS_LITE_URL",
+        image: "/samples/rws-lite-preview.jpg",
+        description:
+          "The rebuilt multi-station weather + radiation dashboard — live sensor charts, wind rose, outage detection, and historical sync. Running here on synthetic mock data instead of live Pi hardware.",
+      },
+      {
+        label: "DIYgm Server Edition",
+        href: "PLACEHOLDER_DIYGM_URL",
+        image: "/samples/diygm-preview.jpg",
+        description:
+          "A standalone Raspberry Pi radiation-detector dashboard — live CPS/CPM charts, calibration, and session logging. Running here on synthetic mock data instead of a real Geiger counter.",
+      },
     ],
   },
   {

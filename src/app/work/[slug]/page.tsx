@@ -168,6 +168,52 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
             )}
           </div>
         </div>
+
+        {project.samples && project.samples.length > 0 && (
+          <div className="mt-14 pt-10 border-t border-[#1a3326]/8">
+            <p
+              className="text-xs tracking-[0.2em] uppercase text-[#7a9e8a] mb-6"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              work samples
+            </p>
+            <div className="grid sm:grid-cols-2 gap-6">
+              {project.samples.map((s) => (
+                <a
+                  key={s.href}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group glass rounded-xl overflow-hidden flex flex-col hover:shadow-md transition-all duration-300 hover:translate-y-[-2px]"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={s.image}
+                    alt={`${s.label} preview`}
+                    className="w-full aspect-video object-cover"
+                  />
+                  <div className="p-5 flex flex-col gap-2">
+                    <h3
+                      className="text-lg font-light text-[#1a3326] group-hover:text-[#2a6a4a] transition-colors"
+                      style={{ fontFamily: "var(--font-display)" }}
+                    >
+                      {s.label}
+                    </h3>
+                    <p className="text-[11px] leading-relaxed text-[#1a3326]/55" style={{ fontFamily: "var(--font-mono)" }}>
+                      {s.description}
+                    </p>
+                    <span
+                      className="text-[10px] tracking-[0.15em] uppercase text-[#7a9e8a] group-hover:text-[#1a3326] transition-colors mt-1"
+                      style={{ fontFamily: "var(--font-mono)" }}
+                    >
+                      open sample ↗
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
       </article>
     </main>
   );

@@ -121,19 +121,14 @@ export default function Home() {
       </div>
 
       {/* elsewhere */}
-      <section className="w-full max-w-5xl mx-auto px-6 py-8">
+      <section id="elsewhere" className="w-full max-w-5xl mx-auto px-6 py-8">
         <p
           className="text-xs tracking-[0.25em] uppercase text-[#7a9e8a] mb-8"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           [ elsewhere ]
         </p>
-        <a
-          href="https://www.instagram.com/poke.mei/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flip-card group block h-36 sm:h-28 rounded-xl"
-        >
+        <Link href="/tattoo-lab" className="flip-card group block h-36 sm:h-28 rounded-xl">
           <div className="flip-card-inner rounded-xl">
             {/* front — decorative image */}
             <div
@@ -153,11 +148,11 @@ export default function Home() {
                 className="text-[10px] tracking-[0.15em] uppercase text-[#7a9e8a] group-hover:text-[#1a3326] transition-colors shrink-0"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
-                @poke.mei on instagram ↗
+                try it on a body ↗
               </span>
             </div>
           </div>
-        </a>
+        </Link>
       </section>
 
       {/* footer */}

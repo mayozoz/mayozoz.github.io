@@ -28,7 +28,7 @@ export default function GalleryPage() {
           coming soon
         </h1>
         <p
-          className="text-xs text-[#1a3326]/40 max-w-xs mx-auto leading-relaxed"
+          className="text-sm text-[#1a3326]/40 max-w-xs mx-auto leading-relaxed"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           full gallery in progress — preview the models on the home page

@@ -34,11 +34,11 @@ export default function SkillsSection() {
       >
         [ skills ]
       </p>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid sm:grid-cols-2 gap-6">
         {skillGroups.map((group) => (
           <div key={group.label} className="glass rounded-xl p-5 flex flex-col gap-3">
             <p
-              className="text-[9px] tracking-[0.25em] uppercase text-[#1a3326]/40"
+              className="text-[11px] tracking-[0.25em] uppercase text-[#1a3326]/40"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               {group.label}
@@ -47,7 +47,7 @@ export default function SkillsSection() {
               {group.skills.map((skill) => (
                 <span
                   key={skill}
-                  className="text-[10px] tracking-wide px-2 py-0.5 rounded-full bg-[#1a3326]/5 text-[#1a3326]/60"
+                  className="text-[12px] tracking-wide px-2 py-0.5 rounded-full bg-[#1a3326]/5 text-[#1a3326]/60"
                   style={{ fontFamily: "var(--font-mono)" }}
                 >
                   {skill}

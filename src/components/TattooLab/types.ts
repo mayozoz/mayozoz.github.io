@@ -1,8 +1,12 @@
 import * as THREE from "three";
+import type { FlashId } from "./tattooDesigns";
 
-export type PlacedDecal = {
-  part: string;
+// At most one placement per design — re-placing the same design moves it and
+// forces it visible again; the sidebar can independently toggle visibility
+// without discarding the placement.
+export type PlacedInk = {
+  design: FlashId;
   localPosition: THREE.Vector3;
   seed: number;
-  designId: string;
+  visible: boolean;
 };

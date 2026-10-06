@@ -24,7 +24,7 @@ function ProjectCard({ project }: { project: (typeof staticProjects)[number] }) 
         {project.tags.map((t) => (
           <span
             key={t}
-            className={`text-[9px] tracking-widest uppercase px-2 py-0.5 rounded-full ${tagColors[t] ?? "bg-[#dceee6]/40 text-[#1a3326]/50"}`}
+            className={`text-[11px] tracking-widest uppercase px-2 py-0.5 rounded-full ${tagColors[t] ?? "bg-[#dceee6]/40 text-[#1a3326]/50"}`}
             style={{ fontFamily: "var(--font-mono)" }}
           >
             {t}
@@ -39,15 +39,15 @@ function ProjectCard({ project }: { project: (typeof staticProjects)[number] }) 
           {project.title}
         </h3>
         {project.period && (
-          <span className="text-[9px] tracking-wide text-[#1a3326]/35" style={{ fontFamily: "var(--font-mono)" }}>
+          <span className="text-[11px] tracking-wide text-[#1a3326]/35" style={{ fontFamily: "var(--font-mono)" }}>
             {project.period}
           </span>
         )}
       </div>
-      <p className="text-[11px] leading-relaxed text-[#1a3326]/55 flex-1" style={{ fontFamily: "var(--font-mono)" }}>
+      <p className="text-[13px] leading-relaxed text-[#1a3326]/55 flex-1" style={{ fontFamily: "var(--font-mono)" }}>
         {project.oneliner}
       </p>
-      <span className="text-[10px] tracking-[0.15em] uppercase text-[#7a9e8a] group-hover:text-[#1a3326] transition-colors" style={{ fontFamily: "var(--font-mono)" }}>
+      <span className="text-[12px] tracking-[0.15em] uppercase text-[#7a9e8a] group-hover:text-[#1a3326] transition-colors" style={{ fontFamily: "var(--font-mono)" }}>
         read more →
       </span>
     </Link>
@@ -65,7 +65,7 @@ export default function ProjectGrid() {
           <p className="text-xs tracking-[0.25em] uppercase text-[#7a9e8a] mb-8" style={{ fontFamily: "var(--font-mono)" }}>
             [ experience ]
           </p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid sm:grid-cols-2 gap-6">
             {experience.map((p) => <ProjectCard key={p.slug} project={p} />)}
           </div>
         </div>
@@ -76,7 +76,7 @@ export default function ProjectGrid() {
           <p className="text-xs tracking-[0.25em] uppercase text-[#7a9e8a] mb-8" style={{ fontFamily: "var(--font-mono)" }}>
             [ projects ]
           </p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid sm:grid-cols-2 gap-6">
             {projects.map((p) => <ProjectCard key={p.slug} project={p} />)}
           </div>
         </div>

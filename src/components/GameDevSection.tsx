@@ -61,7 +61,7 @@ function GameCard({ project }: { project: Project }) {
           {project.tags.map((t) => (
             <span
               key={t}
-              className="text-[9px] tracking-widest uppercase px-2 py-0.5 rounded-full bg-[#b8dccb]/40 text-[#2a6a4a]"
+              className="text-[11px] tracking-widest uppercase px-2 py-0.5 rounded-full bg-[#b8dccb]/40 text-[#2a6a4a]"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               {t}
@@ -73,12 +73,12 @@ function GameCard({ project }: { project: Project }) {
           {project.title}
         </h3>
 
-        <p className="text-[11px] leading-relaxed text-[#1a3326]/55 flex-1" style={{ fontFamily: "var(--font-mono)" }}>
+        <p className="text-[13px] leading-relaxed text-[#1a3326]/55 flex-1" style={{ fontFamily: "var(--font-mono)" }}>
           {project.oneliner}
         </p>
 
         {project.mediaNote && (
-          <p className="text-[10px] leading-relaxed italic text-[#1a3326]/40" style={{ fontFamily: "var(--font-mono)" }}>
+          <p className="text-[12px] leading-relaxed italic text-[#1a3326]/40" style={{ fontFamily: "var(--font-mono)" }}>
             {project.mediaNote}
           </p>
         )}
@@ -87,7 +87,7 @@ function GameCard({ project }: { project: Project }) {
           {project.playUrl && mode !== "play" && (
             <button
               onClick={() => setMode("play")}
-              className="text-[10px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors cursor-pointer"
+              className="text-[12px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors cursor-pointer"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               play in browser →
@@ -99,7 +99,7 @@ function GameCard({ project }: { project: Project }) {
               href={l.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[10px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
+              className="text-[12px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               {l.label} ↗
@@ -107,7 +107,7 @@ function GameCard({ project }: { project: Project }) {
           ))}
           <Link
             href={`/work/${project.slug}`}
-            className="text-[10px] tracking-[0.15em] uppercase text-[#1a3326]/40 hover:text-[#1a3326] transition-colors"
+            className="text-[12px] tracking-[0.15em] uppercase text-[#1a3326]/40 hover:text-[#1a3326] transition-colors"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             case study →
@@ -115,7 +115,7 @@ function GameCard({ project }: { project: Project }) {
         </div>
 
         {mode === "play" && (
-          <p className="text-[10px] text-[#1a3326]/35 pt-1" style={{ fontFamily: "var(--font-mono)" }}>
+          <p className="text-[12px] text-[#1a3326]/35 pt-1" style={{ fontFamily: "var(--font-mono)" }}>
             Unity WebGL build — give it a moment to load.
           </p>
         )}

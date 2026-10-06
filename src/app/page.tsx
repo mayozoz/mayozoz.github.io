@@ -39,7 +39,7 @@ export default function Home() {
         </Link>
 
         <p
-          className="text-xs leading-relaxed text-[#1a3326]/50 max-w-xs mt-1"
+          className="text-sm leading-relaxed text-[#1a3326]/50 max-w-xs mt-1"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           CS student at the University of Michigan. I build iOS apps, game
@@ -50,7 +50,7 @@ export default function Home() {
             href="https://github.com/mayozoz"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[11px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
+            className="text-[13px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             github ↗
@@ -59,7 +59,7 @@ export default function Home() {
             href="https://www.linkedin.com/in/meiyy"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[11px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
+            className="text-[13px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             linkedin ↗
@@ -68,7 +68,7 @@ export default function Home() {
             href="https://runnyeggpie.itch.io/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[11px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
+            className="text-[13px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             itch.io ↗
@@ -77,14 +77,14 @@ export default function Home() {
             href="https://www.instagram.com/poke.mei/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[11px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
+            className="text-[13px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             tattoos ↗
           </a>
           <a
             href="mailto:mei.yang0508@gmail.com"
-            className="text-[11px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
+            className="text-[13px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             email ↗
@@ -139,13 +139,13 @@ export default function Home() {
             {/* back — revealed on hover */}
             <div className="flip-card-face flip-card-back glass rounded-xl p-6 flex flex-col sm:flex-row sm:items-center justify-center gap-3 text-center sm:text-left">
               <p
-                className="text-[11px] leading-relaxed text-[#1a3326]/55"
+                className="text-[13px] leading-relaxed text-[#1a3326]/55"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
                 Outside of code, I draw and tattoo.
               </p>
               <span
-                className="text-[10px] tracking-[0.15em] uppercase text-[#7a9e8a] group-hover:text-[#1a3326] transition-colors shrink-0"
+                className="text-[12px] tracking-[0.15em] uppercase text-[#7a9e8a] group-hover:text-[#1a3326] transition-colors shrink-0"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
                 try it on a body ↗
@@ -169,7 +169,7 @@ export default function Home() {
             href="https://mayozoz.github.io/portfolio/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[11px] tracking-[0.15em] text-[#1a3326]/25 hover:text-[#7a9e8a] transition-colors"
+            className="text-[13px] tracking-[0.15em] text-[#1a3326]/25 hover:text-[#7a9e8a] transition-colors"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             ← portfolio v1

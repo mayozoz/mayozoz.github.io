@@ -44,7 +44,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
             {project.tags.map((t) => (
               <span
                 key={t}
-                className="text-[10px] tracking-widest uppercase px-2 py-0.5 rounded-full bg-[#e8b4c0]/30 text-[#1a3326]/50"
+                className="text-[12px] tracking-widest uppercase px-2 py-0.5 rounded-full bg-[#e8b4c0]/30 text-[#1a3326]/50"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
                 {t}
@@ -58,7 +58,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
             {project.title}
           </h1>
           <p
-            className="text-sm leading-relaxed text-[#1a3326]/55 max-w-xl"
+            className="text-base leading-relaxed text-[#1a3326]/55 max-w-xl"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             {project.oneliner}
@@ -90,7 +90,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
               overview
             </p>
             <p
-              className="text-sm leading-loose text-[#1a3326]/70"
+              className="text-base leading-loose text-[#1a3326]/70"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               {project.description}
@@ -108,7 +108,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
                   {project.highlights.map((h, i) => (
                     <li
                       key={i}
-                      className="text-sm text-[#1a3326]/65 flex gap-3 leading-relaxed"
+                      className="text-base text-[#1a3326]/65 flex gap-3 leading-relaxed"
                       style={{ fontFamily: "var(--font-mono)" }}
                     >
                       <span className="text-[#8bc4aa] shrink-0 mt-0.5">—</span>
@@ -133,7 +133,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
                 {project.stack.map((s) => (
                   <span
                     key={s}
-                    className="glass-dark text-[10px] px-2 py-1 rounded-md text-[#1a3326]/60"
+                    className="glass-dark text-[12px] px-2 py-1 rounded-md text-[#1a3326]/60"
                     style={{ fontFamily: "var(--font-mono)" }}
                   >
                     {s}
@@ -157,7 +157,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
                       href={l.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block text-xs tracking-[0.1em] text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
+                      className="block text-sm tracking-[0.1em] text-[#7a9e8a] hover:text-[#1a3326] transition-colors"
                       style={{ fontFamily: "var(--font-mono)" }}
                     >
                       {l.label} ↗
@@ -199,11 +199,11 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
                     >
                       {s.label}
                     </h3>
-                    <p className="text-[11px] leading-relaxed text-[#1a3326]/55" style={{ fontFamily: "var(--font-mono)" }}>
+                    <p className="text-[13px] leading-relaxed text-[#1a3326]/55" style={{ fontFamily: "var(--font-mono)" }}>
                       {s.description}
                     </p>
                     <span
-                      className="text-[10px] tracking-[0.15em] uppercase text-[#7a9e8a] group-hover:text-[#1a3326] transition-colors mt-1"
+                      className="text-[12px] tracking-[0.15em] uppercase text-[#7a9e8a] group-hover:text-[#1a3326] transition-colors mt-1"
                       style={{ fontFamily: "var(--font-mono)" }}
                     >
                       open sample ↗

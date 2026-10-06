@@ -50,7 +50,7 @@ export default function ContactPage() {
             Say hello.
           </h1>
           <p
-            className="text-xs leading-relaxed text-[#1a3326]/45"
+            className="text-sm leading-relaxed text-[#1a3326]/45"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             I'll get back to you at mei.yang0508@gmail.com.
@@ -70,7 +70,7 @@ export default function ContactPage() {
             </p>
             <button
               onClick={() => setStatus("idle")}
-              className="text-[11px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors text-left mt-1"
+              className="text-[13px] tracking-[0.15em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors text-left mt-1"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               send another →
@@ -81,7 +81,7 @@ export default function ContactPage() {
             <div className="flex flex-col gap-1.5">
               <label
                 htmlFor="name"
-                className="text-[9px] tracking-[0.25em] uppercase text-[#1a3326]/40"
+                className="text-[11px] tracking-[0.25em] uppercase text-[#1a3326]/40"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
                 Name
@@ -100,7 +100,7 @@ export default function ContactPage() {
             <div className="flex flex-col gap-1.5">
               <label
                 htmlFor="email"
-                className="text-[9px] tracking-[0.25em] uppercase text-[#1a3326]/40"
+                className="text-[11px] tracking-[0.25em] uppercase text-[#1a3326]/40"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
                 Email
@@ -119,7 +119,7 @@ export default function ContactPage() {
             <div className="flex flex-col gap-1.5">
               <label
                 htmlFor="message"
-                className="text-[9px] tracking-[0.25em] uppercase text-[#1a3326]/40"
+                className="text-[11px] tracking-[0.25em] uppercase text-[#1a3326]/40"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
                 Message
@@ -136,7 +136,7 @@ export default function ContactPage() {
             </div>
 
             {status === "error" && (
-              <p className="text-[11px] text-red-400" style={{ fontFamily: "var(--font-mono)" }}>
+              <p className="text-[13px] text-red-400" style={{ fontFamily: "var(--font-mono)" }}>
                 Something went wrong. Please try again.
               </p>
             )}
@@ -144,7 +144,7 @@ export default function ContactPage() {
             <button
               type="submit"
               disabled={isPending}
-              className="self-start text-[11px] tracking-[0.2em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors disabled:opacity-40"
+              className="self-start text-[13px] tracking-[0.2em] uppercase text-[#7a9e8a] hover:text-[#1a3326] transition-colors disabled:opacity-40"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               {isPending ? "sending..." : "send →"}

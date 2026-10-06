@@ -22,6 +22,28 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: "doodle-ffa",
+    title: "Doodle FFA",
+    oneliner: "Draw your own weapon and battle royale with up to 12 players on your phones — MHacks 2026, ElevenLabs track winner.",
+    tags: ["game dev", "ai production", "web"],
+    category: "projects",
+    youtubeId: "B1xxp1ZwI_0",
+    description:
+      "A same-room party battle royale for 2–12 players built at MHacks 2026, where you draw your own weapon on your phone and fight with it on a shared screen. Players scan a QR code to join, sketch a weapon in 20 seconds, then watch it get an 'upgrade' moment into finished game art with an AI-voiced reveal before a 60-second battle with phone-as-controller. The core design rule was the 'invisible middle': players never see the words AI, generating, spinners, or stats — you draw, and seconds later it's a real weapon with its own attack style, projectile behavior, effects, and sound. Under the hood, the AI only ever picks flavor from fixed building blocks (8 attack archetypes, projectile behaviors, decorations); a server-side balance formula sets the real numbers so every weapon deals identical damage per second, and nothing you draw can break the game. Every AI step has an instant fallback — a slow weapon designer falls back to shape-derived stats, failed art falls back to the raw doodle, failed audio falls back to a stock sound — so a round never stalls on an API call. The whole game server is a single SpacetimeDB module running rooms, a 20Hz battle simulation, and real-time sync to every phone and the big screen, with no separate backend.",
+    stack: ["TypeScript", "SpacetimeDB", "PixiJS", "Three.js", "AWS S3", "CloudFront", "ElevenLabs", "xAI Grok Imagine", "Fetch.ai ASI:One"],
+    links: [
+      { label: "Play on doodleffa.tech", href: "https://doodleffa.tech" },
+      { label: "Code on GitHub", href: "https://github.com/mayozoz/mhacks26" },
+    ],
+    highlights: [
+      "Won the ElevenLabs track at MHacks 2026 (Major League Hacking)",
+      "'Invisible middle' design — doodles become fully animated, voiced weapons with zero visible AI/loading UI",
+      "Server-side balance formula normalizes damage-per-second across any drawn weapon shape",
+      "Every AI step (weapon design, art, sound) has an instant fallback, so a round never stalls on an API call",
+      "SpacetimeDB runs the entire game server — rooms, 20Hz battle simulation, and real-time sync — with no separate backend",
+    ],
+  },
+  {
     slug: "stillbite",
     title: "Stillbite",
     oneliner: "Full-stack iOS meal journal shipped to the App Store — photo-first logging with a custom crop modal and a RevenueCat paywall.",
@@ -224,4 +246,9 @@ export const projects: Project[] = [
 ];
 
 export const videoProjects = projects.filter((p) => p.youtubeId);
-export const staticProjects = projects.filter((p) => !p.youtubeId);
+
+// The game-dev section on the homepage already features these two with
+// their own embeds/play links — everything else with a youtubeId (e.g.
+// doodle-ffa, perfume) still belongs in the main grid, video and all.
+const FEATURED_IN_GAME_DEV_SECTION = ["the-boot", "game-engine"];
+export const staticProjects = projects.filter((p) => !FEATURED_IN_GAME_DEV_SECTION.includes(p.slug));

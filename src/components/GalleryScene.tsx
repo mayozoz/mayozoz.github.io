@@ -335,7 +335,7 @@ export default function GalleryScene() {
         </button>
       </div>
 
-      <p className="text-[11px] text-[#1a3326]/40 mt-4 text-center" style={{ fontFamily: "var(--font-mono)" }}>
+      <p className="text-[13px] text-[#1a3326]/40 mt-4 text-center" style={{ fontFamily: "var(--font-mono)" }}>
         scroll or use arrows · click a model to focus
       </p>
     </section>

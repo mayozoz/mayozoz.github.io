@@ -279,10 +279,6 @@
   background: radial-gradient(ellipse at 50% 48%, #292927 0%, #171717 34%, #101010 67%, #0d0d0d 100%);
 }
 
-.viewer:active {
-  cursor: ew-resize;
-}
-
 .viewer-grid {
   position: absolute;
   inset: 0;

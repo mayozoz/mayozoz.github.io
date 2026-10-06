@@ -97,7 +97,6 @@ export default function TattooLabCanvas() {
   const bodyGroupRef = useRef<THREE.Group>(null);
   const angularVelocityYRef = useRef(0);
   const angularVelocityXRef = useRef(0);
-  const isRotatingRef = useRef(false);
   const selectedDesignIdRef = useRef<FlashId>(DEFAULT_DESIGN);
 
   const [selectedDesignId, setSelectedDesignId] = useState<FlashId>(DEFAULT_DESIGN);
@@ -169,19 +168,11 @@ export default function TattooLabCanvas() {
               </Suspense>
               <AutoFrameCamera targetRef={bodyGroupRef} />
               <GroundShadowCatcher targetRef={bodyGroupRef} />
-              <PointerController
-                bodyGroupRef={bodyGroupRef}
-                setInks={setInks}
-                selectedDesignIdRef={selectedDesignIdRef}
-                angularVelocityYRef={angularVelocityYRef}
-                angularVelocityXRef={angularVelocityXRef}
-                isRotatingRef={isRotatingRef}
-              />
+              <PointerController bodyGroupRef={bodyGroupRef} setInks={setInks} selectedDesignIdRef={selectedDesignIdRef} />
               <RotationRig
                 groupRef={bodyGroupRef}
                 angularVelocityYRef={angularVelocityYRef}
                 angularVelocityXRef={angularVelocityXRef}
-                isRotatingRef={isRotatingRef}
               />
               <RotationReadout groupRef={bodyGroupRef} onChange={(yaw, pitch) => setOrientation({ yaw, pitch })} />
             </Canvas>
@@ -195,7 +186,7 @@ export default function TattooLabCanvas() {
               <i />
             </span>
             <span>
-              <strong>Drag to rotate</strong>Click figure to apply ink
+              <strong>Two-finger scroll to rotate</strong>Click &amp; drag to place or move ink
             </span>
           </div>
         </div>

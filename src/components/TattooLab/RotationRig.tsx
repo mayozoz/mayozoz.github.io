@@ -16,14 +16,14 @@ type Props = {
   groupRef: RefObject<THREE.Group | null>;
   angularVelocityYRef: MutableRefObject<number>;
   angularVelocityXRef: MutableRefObject<number>;
-  isRotatingRef: MutableRefObject<boolean>;
 };
 
-// Applies (and decays) angular velocity to the body group every frame, so
-// both wheel bursts and released drags coast to a smooth stop instead of
-// snapping. Skips applying velocity while a pointer drag is actively
-// rotating (that path sets rotation directly for 1:1 tracking).
-export default function RotationRig({ groupRef, angularVelocityYRef, angularVelocityXRef, isRotatingRef }: Props) {
+// Applies (and decays) angular velocity to the body group every frame, so a
+// two-finger scroll burst coasts to a smooth stop instead of snapping.
+// Rotation is wheel-only (see TattooLabCanvas's onWheel) — pointer drags are
+// reserved entirely for placing/moving ink (see PointerController), so there's
+// no competing direct-rotation code path to gate against here.
+export default function RotationRig({ groupRef, angularVelocityYRef, angularVelocityXRef }: Props) {
   useFrame((_, delta) => {
     const group = groupRef.current;
     if (!group) return;
@@ -31,14 +31,12 @@ export default function RotationRig({ groupRef, angularVelocityYRef, angularVelo
     angularVelocityYRef.current = THREE.MathUtils.clamp(angularVelocityYRef.current, -MAX_VELOCITY, MAX_VELOCITY);
     angularVelocityXRef.current = THREE.MathUtils.clamp(angularVelocityXRef.current, -MAX_VELOCITY, MAX_VELOCITY);
 
-    if (!isRotatingRef.current) {
-      group.rotation.y += angularVelocityYRef.current * delta;
-      group.rotation.x = THREE.MathUtils.clamp(
-        group.rotation.x + angularVelocityXRef.current * delta,
-        -PITCH_LIMIT,
-        PITCH_LIMIT
-      );
-    }
+    group.rotation.y += angularVelocityYRef.current * delta;
+    group.rotation.x = THREE.MathUtils.clamp(
+      group.rotation.x + angularVelocityXRef.current * delta,
+      -PITCH_LIMIT,
+      PITCH_LIMIT
+    );
 
     const decay = Math.pow(DAMPING, delta * 60);
     angularVelocityYRef.current *= decay;

@@ -6,45 +6,25 @@ import * as THREE from "three";
 import type { PlacedInk } from "./types";
 import type { FlashId } from "./tattooDesigns";
 
-const PITCH_LIMIT = 1.05; // ~60°, matches RotationRig's momentum clamp
-// Pointer movement (px) before a gesture that started on empty body/background
-// is treated as a drag-to-rotate instead of a click-to-place.
-const DRAG_THRESHOLD_PX = 4;
-// Drag-to-rotate sensitivity (radians per pixel of pointer movement).
-const DRAG_ROTATE_SENSITIVITY = 0.008;
-// How much of a drag's last-frame speed carries over as coast velocity on release.
-const DRAG_RELEASE_VELOCITY_SENSITIVITY = 0.35;
-
 type Props = {
   bodyGroupRef: RefObject<THREE.Group | null>;
   setInks: Dispatch<SetStateAction<PlacedInk[]>>;
   selectedDesignIdRef: MutableRefObject<FlashId | null>;
-  angularVelocityYRef: MutableRefObject<number>;
-  angularVelocityXRef: MutableRefObject<number>;
-  isRotatingRef: MutableRefObject<boolean>;
 };
 
-type Mode = "idle" | "pending" | "rotate" | "move-ink";
-
-export default function PointerController({
-  bodyGroupRef,
-  setInks,
-  selectedDesignIdRef,
-  angularVelocityYRef,
-  angularVelocityXRef,
-  isRotatingRef,
-}: Props) {
+// Pointer drags are reserved entirely for ink — rotation is a separate,
+// two-finger-scroll-only gesture (see TattooLabCanvas's onWheel), which
+// arrives as wheel events and never competes with these pointer events.
+// Pressing on the body places (or re-grabs) the selected design and follows
+// the cursor live until release; pressing directly on an existing decal
+// grabs that one instead, regardless of what's currently selected.
+export default function PointerController({ bodyGroupRef, setInks, selectedDesignIdRef }: Props) {
   const { camera, gl, raycaster } = useThree();
 
   useEffect(() => {
     const dom = gl.domElement;
     const ndc = new THREE.Vector2();
-    let mode: Mode = "idle";
-    let startX = 0;
-    let startY = 0;
-    let lastX = 0;
-    let lastY = 0;
-    let movingDesign: FlashId | null = null;
+    let activeDesign: FlashId | null = null;
     let activePointerId: number | null = null;
 
     const setNdc = (e: PointerEvent) => {
@@ -63,9 +43,7 @@ export default function PointerController({
     const raycastSurface = () => intersectBody().find((h) => h.object.name !== "tattoo-decal") ?? null;
     const raycastDecal = () => intersectBody().find((h) => h.object.name === "tattoo-decal") ?? null;
 
-    const placeOrMoveSelected = (localPosition: THREE.Vector3) => {
-      const design = selectedDesignIdRef.current;
-      if (!design) return;
+    const upsertInk = (design: FlashId, localPosition: THREE.Vector3) => {
       setInks((prev) => {
         const idx = prev.findIndex((i) => i.design === design);
         if (idx === -1) {
@@ -77,97 +55,47 @@ export default function PointerController({
       });
     };
 
-    const moveInkTo = (design: FlashId, localPosition: THREE.Vector3) => {
-      setInks((prev) => prev.map((i) => (i.design === design ? { ...i, localPosition } : i)));
-    };
-
     const onPointerDown = (e: PointerEvent) => {
       setNdc(e);
       const decalHit = raycastDecal();
 
       if (decalHit) {
-        mode = "move-ink";
-        movingDesign = (decalHit.object.userData as { design?: FlashId }).design ?? null;
+        activeDesign = (decalHit.object.userData as { design?: FlashId }).design ?? null;
       } else {
-        // Don't decide yet — a click-to-place and a drag-to-rotate both start
-        // identically here; onPointerMove promotes this to "rotate" once the
-        // pointer actually travels.
-        mode = "pending";
-        startX = e.clientX;
-        startY = e.clientY;
+        const bodyHit = raycastSurface();
+        const design = selectedDesignIdRef.current;
+        if (bodyHit && design) {
+          activeDesign = design;
+          const mesh = bodyHit.object as THREE.Mesh;
+          upsertInk(design, mesh.worldToLocal(bodyHit.point.clone()));
+        } else {
+          activeDesign = null;
+        }
       }
 
-      lastX = e.clientX;
-      lastY = e.clientY;
+      if (!activeDesign) return; // missed the body and/or nothing selected — nothing to track
       activePointerId = e.pointerId;
       dom.setPointerCapture(e.pointerId);
     };
 
     const onPointerMove = (e: PointerEvent) => {
-      if (activePointerId === null || e.pointerId !== activePointerId) return;
+      if (activePointerId === null || e.pointerId !== activePointerId || !activeDesign) return;
       setNdc(e);
-
-      if (mode === "move-ink") {
-        if (movingDesign) {
-          const hit = raycastSurface();
-          if (hit) {
-            const mesh = hit.object as THREE.Mesh;
-            moveInkTo(movingDesign, mesh.worldToLocal(hit.point.clone()));
-          }
-        }
-        return;
-      }
-
-      if (mode === "pending") {
-        const dist = Math.hypot(e.clientX - startX, e.clientY - startY);
-        if (dist < DRAG_THRESHOLD_PX) return;
-        mode = "rotate";
-        isRotatingRef.current = true;
-        // fall through to apply this frame's delta immediately
-      }
-
-      if (mode === "rotate") {
-        const dx = e.clientX - lastX;
-        const dy = e.clientY - lastY;
-        lastX = e.clientX;
-        lastY = e.clientY;
-        const group = bodyGroupRef.current;
-        if (group) {
-          group.rotation.y += dx * DRAG_ROTATE_SENSITIVITY;
-          // Drag up tilts the top toward you (like rolling a ball with your
-          // finger), clamped so it can't flip fully upside down.
-          group.rotation.x = THREE.MathUtils.clamp(
-            group.rotation.x - dy * DRAG_ROTATE_SENSITIVITY,
-            -PITCH_LIMIT,
-            PITCH_LIMIT
-          );
-        }
-        angularVelocityYRef.current = dx * DRAG_RELEASE_VELOCITY_SENSITIVITY;
-        angularVelocityXRef.current = -dy * DRAG_RELEASE_VELOCITY_SENSITIVITY;
+      const hit = raycastSurface();
+      if (hit) {
+        const mesh = hit.object as THREE.Mesh;
+        upsertInk(activeDesign, mesh.worldToLocal(hit.point.clone()));
       }
     };
 
     const endDrag = (e: PointerEvent) => {
       if (activePointerId === null || e.pointerId !== activePointerId) return;
-
-      if (mode === "pending") {
-        // Pointer never traveled past the threshold — a true click.
-        setNdc(e);
-        const hit = raycastSurface();
-        if (hit) {
-          const mesh = hit.object as THREE.Mesh;
-          placeOrMoveSelected(mesh.worldToLocal(hit.point.clone()));
-        }
-      }
-
       try {
         dom.releasePointerCapture(e.pointerId);
       } catch {
         // pointer capture may already be released by the browser
       }
-      mode = "idle";
-      isRotatingRef.current = false;
-      movingDesign = null;
+      activeDesign = null;
       activePointerId = null;
     };
 
@@ -182,7 +110,7 @@ export default function PointerController({
       dom.removeEventListener("pointerup", endDrag);
       dom.removeEventListener("pointercancel", endDrag);
     };
-  }, [camera, gl, raycaster, bodyGroupRef, setInks, selectedDesignIdRef, angularVelocityYRef, angularVelocityXRef, isRotatingRef]);
+  }, [camera, gl, raycaster, bodyGroupRef, setInks, selectedDesignIdRef]);
 
   return null;
 }

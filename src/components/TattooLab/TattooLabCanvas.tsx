@@ -16,6 +16,8 @@ import type { PlacedInk } from "./types";
 import "./tattooLab.css";
 
 const DEFAULT_DESIGN: FlashId = "moth";
+const WHEEL_SENSITIVITY = 0.045;
+const MAX_WHEEL_DELTA = 60;
 
 function useDesignTextures() {
   return useMemo(() => {
@@ -95,6 +97,7 @@ function SceneLighting() {
 
 export default function TattooLabCanvas() {
   const bodyGroupRef = useRef<THREE.Group>(null);
+  const viewerRef = useRef<HTMLDivElement>(null);
   const angularVelocityYRef = useRef(0);
   const angularVelocityXRef = useRef(0);
   const selectedDesignIdRef = useRef<FlashId>(DEFAULT_DESIGN);
@@ -108,6 +111,24 @@ export default function TattooLabCanvas() {
   useEffect(() => {
     selectedDesignIdRef.current = selectedDesignId;
   }, [selectedDesignId]);
+
+  // Two-finger trackpad scroll (and mouse wheel) rotates — horizontal delta
+  // feeds yaw, vertical feeds pitch, both added as velocity for RotationRig
+  // to apply/decay every frame rather than snapping directly.
+  useEffect(() => {
+    const el = viewerRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) < 1 && Math.abs(e.deltaY) < 1) return;
+      e.preventDefault();
+      const dx = THREE.MathUtils.clamp(e.deltaX, -MAX_WHEEL_DELTA, MAX_WHEEL_DELTA);
+      const dy = THREE.MathUtils.clamp(e.deltaY, -MAX_WHEEL_DELTA, MAX_WHEEL_DELTA);
+      angularVelocityYRef.current += dx * WHEEL_SENSITIVITY;
+      angularVelocityXRef.current -= dy * WHEEL_SENSITIVITY;
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
 
   // Always arms the clicked design for the next placement; if it's already
   // placed somewhere, also toggles its current visibility — placement
@@ -148,7 +169,7 @@ export default function TattooLabCanvas() {
       <section className="workspace">
         <DesignSidebar inks={inks} selectedId={selectedDesignId} onCardClick={handleFlashCardClick} />
 
-        <div className="viewer">
+        <div className="viewer" ref={viewerRef}>
           <div className="viewer-grid" />
           <div className="axis axis-x" />
           <div className="axis axis-y" />

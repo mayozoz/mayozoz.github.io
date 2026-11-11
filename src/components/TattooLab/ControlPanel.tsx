@@ -4,14 +4,18 @@ import FlashMark from "./FlashMark";
 import { FLASH_DESIGNS, type FlashId } from "./tattooDesigns";
 import type { PlacedInk } from "./types";
 
+type Style = { size: number; opacity: number };
+
 type Props = {
   inks: PlacedInk[];
   selectedId: FlashId;
   yawDeg: number;
+  style: Style;
+  onStyleChange: (next: Partial<Style>) => void;
   onClear: () => void;
 };
 
-export default function ControlPanel({ inks, selectedId, yawDeg, onClear }: Props) {
+export default function ControlPanel({ inks, selectedId, yawDeg, style, onStyleChange, onClear }: Props) {
   const selectedDesign = FLASH_DESIGNS.find((d) => d.id === selectedId)!;
   const placedCount = inks.filter((i) => i.visible).length;
 
@@ -29,14 +33,40 @@ export default function ControlPanel({ inks, selectedId, yawDeg, onClear }: Prop
             <strong>{selectedDesign.name}</strong>
           </div>
         </div>
+
+        <div className="style-sliders">
+          <div className="style-slider">
+            <input
+              type="range"
+              min={0.4}
+              max={2}
+              step={0.01}
+              value={style.size}
+              onChange={(e) => onStyleChange({ size: Number(e.target.value) })}
+              aria-label="Ink size"
+            />
+            <span className="style-slider-label">Size</span>
+            <span className="style-slider-value">{Math.round(style.size * 100)}%</span>
+          </div>
+          <div className="style-slider">
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={style.opacity}
+              onChange={(e) => onStyleChange({ opacity: Number(e.target.value) })}
+              aria-label="Ink opacity"
+            />
+            <span className="style-slider-label">Opacity</span>
+            <span className="style-slider-value">{Math.round(style.opacity * 100)}%</span>
+          </div>
+        </div>
+
         <dl className="measurements">
           <div>
             <dt>Orientation</dt>
             <dd>{Math.round(((yawDeg % 360) + 360) % 360)}°</dd>
-          </div>
-          <div>
-            <dt>Scale</dt>
-            <dd>100%</dd>
           </div>
           <div>
             <dt>Surface</dt>

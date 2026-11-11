@@ -1,8 +1,8 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState, type MutableRefObject, type RefObject } from "react";
 import Link from "next/link";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { ContactShadows } from "@react-three/drei";
 import * as THREE from "three";
 import BodyModel from "./BodyModel";
@@ -12,12 +12,17 @@ import RotationReadout from "./RotationReadout";
 import DesignSidebar from "./DesignSidebar";
 import ControlPanel from "./ControlPanel";
 import { FLASH_DESIGNS, renderFlashTexture, type FlashId } from "./tattooDesigns";
-import type { PlacedInk } from "./types";
+import { DEFAULT_INK_STYLE, type PlacedInk } from "./types";
 import "./tattooLab.css";
+
+type InkStyle = { size: number; opacity: number };
 
 const DEFAULT_DESIGN: FlashId = "moth";
 const WHEEL_SENSITIVITY = 0.045;
 const MAX_WHEEL_DELTA = 60;
+const ZOOM_SENSITIVITY = 0.012;
+const MIN_ZOOM = 0.45;
+const MAX_ZOOM = 2.5;
 
 function useDesignTextures() {
   return useMemo(() => {
@@ -34,33 +39,55 @@ function useDesignTextures() {
   }, []);
 }
 
-// Frames the camera to the body's actual bounding box once on mount, instead
-// of hand-tuned position/fov guesswork (which drifts the moment body
-// proportions change).
-function AutoFrameCamera({ targetRef }: { targetRef: RefObject<THREE.Group | null> }) {
+// Frames the camera to the body's actual bounding box once (instead of
+// hand-tuned position/fov guesswork, which drifts the moment body
+// proportions change), then continuously applies `zoomRef` as a multiplier
+// on that fitted distance every frame — smoothed so a pinch gesture (or
+// ctrl+wheel) eases toward its target instead of snapping.
+function CameraRig({
+  targetRef,
+  zoomRef,
+}: {
+  targetRef: RefObject<THREE.Group | null>;
+  zoomRef: MutableRefObject<number>;
+}) {
   const { camera } = useThree();
+  const baseDistance = useRef(0);
+  const center = useRef(new THREE.Vector3());
+  const framed = useRef(false);
 
-  useEffect(() => {
-    const obj = targetRef.current;
-    if (!obj || !(camera instanceof THREE.PerspectiveCamera)) return;
+  useFrame(() => {
+    if (!(camera instanceof THREE.PerspectiveCamera)) return;
 
-    const box = new THREE.Box3().setFromObject(obj);
-    const size = new THREE.Vector3();
-    const center = new THREE.Vector3();
-    box.getSize(size);
-    box.getCenter(center);
+    if (!framed.current) {
+      const obj = targetRef.current;
+      if (!obj) return;
+      const box = new THREE.Box3().setFromObject(obj);
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      box.getCenter(center.current);
 
-    const vFov = (camera.fov * Math.PI) / 180;
-    const fitHeightDistance = size.y / 2 / Math.tan(vFov / 2);
-    const fitWidthDistance = size.x / 2 / Math.tan(vFov / 2) / camera.aspect;
-    const distance = Math.max(fitHeightDistance, fitWidthDistance) * 1.45;
+      const vFov = (camera.fov * Math.PI) / 180;
+      const fitHeightDistance = size.y / 2 / Math.tan(vFov / 2);
+      const fitWidthDistance = size.x / 2 / Math.tan(vFov / 2) / camera.aspect;
+      baseDistance.current = Math.max(fitHeightDistance, fitWidthDistance) * 1.45;
+      camera.near = baseDistance.current / 100;
+      camera.far = baseDistance.current * 10;
+      camera.updateProjectionMatrix();
+      framed.current = true;
+    }
 
-    camera.position.set(center.x, center.y, center.z + distance);
-    camera.near = distance / 100;
-    camera.far = distance * 10;
-    camera.lookAt(center);
-    camera.updateProjectionMatrix();
-  }, [targetRef, camera]);
+    const targetDistance = baseDistance.current * zoomRef.current;
+    const currentDistance = camera.position.distanceTo(center.current) || targetDistance;
+    const nextDistance = THREE.MathUtils.lerp(currentDistance, targetDistance, 0.15);
+
+    const dir = camera.position.clone().sub(center.current);
+    if (dir.lengthSq() < 1e-6) dir.set(0, 0, 1);
+    dir.normalize();
+
+    camera.position.copy(center.current).add(dir.multiplyScalar(nextDistance));
+    camera.lookAt(center.current);
+  });
 
   return null;
 }
@@ -100,11 +127,16 @@ export default function TattooLabCanvas() {
   const viewerRef = useRef<HTMLDivElement>(null);
   const angularVelocityYRef = useRef(0);
   const angularVelocityXRef = useRef(0);
+  const zoomRef = useRef(1);
+  const resetRef = useRef(false);
   const selectedDesignIdRef = useRef<FlashId>(DEFAULT_DESIGN);
+  const styleByDesignRef = useRef<Partial<Record<FlashId, InkStyle>>>({});
 
   const [selectedDesignId, setSelectedDesignId] = useState<FlashId>(DEFAULT_DESIGN);
   const [inks, setInks] = useState<PlacedInk[]>([]);
   const [orientation, setOrientation] = useState({ yaw: 0, pitch: 0 });
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [styleByDesign, setStyleByDesign] = useState<Partial<Record<FlashId, InkStyle>>>({});
 
   const textures = useDesignTextures();
 
@@ -112,13 +144,26 @@ export default function TattooLabCanvas() {
     selectedDesignIdRef.current = selectedDesignId;
   }, [selectedDesignId]);
 
+  useEffect(() => {
+    styleByDesignRef.current = styleByDesign;
+  }, [styleByDesign]);
+
   // Two-finger trackpad scroll (and mouse wheel) rotates — horizontal delta
   // feeds yaw, vertical feeds pitch, both added as velocity for RotationRig
-  // to apply/decay every frame rather than snapping directly.
+  // to apply/decay every frame rather than snapping directly. A trackpad
+  // pinch gesture (or ctrl+wheel) arrives as the same wheel event but with
+  // ctrlKey set — browsers synthesize pinch this way — so it's routed to
+  // zoom instead of rotation.
   useEffect(() => {
     const el = viewerRef.current;
     if (!el) return;
     const onWheel = (e: WheelEvent) => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        const delta = THREE.MathUtils.clamp(e.deltaY, -MAX_WHEEL_DELTA, MAX_WHEEL_DELTA);
+        zoomRef.current = THREE.MathUtils.clamp(zoomRef.current + delta * ZOOM_SENSITIVITY, MIN_ZOOM, MAX_ZOOM);
+        return;
+      }
       if (Math.abs(e.deltaX) < 1 && Math.abs(e.deltaY) < 1) return;
       e.preventDefault();
       const dx = THREE.MathUtils.clamp(e.deltaX, -MAX_WHEEL_DELTA, MAX_WHEEL_DELTA);
@@ -143,6 +188,31 @@ export default function TattooLabCanvas() {
       return next;
     });
   }
+
+  // Size/opacity act on whichever design is currently selected — live on its
+  // placed ink if it has one, otherwise remembered as that design's default
+  // for the moment it does get placed (see PointerController's upsertInk).
+  const activeInk = inks.find((i) => i.design === selectedDesignId);
+  const activeStyle: InkStyle = activeInk ?? styleByDesign[selectedDesignId] ?? DEFAULT_INK_STYLE;
+
+  function handleStyleChange(next: Partial<InkStyle>) {
+    setStyleByDesign((prev) => ({
+      ...prev,
+      [selectedDesignId]: { ...(prev[selectedDesignId] ?? DEFAULT_INK_STYLE), ...next },
+    }));
+    setInks((prev) => prev.map((i) => (i.design === selectedDesignId ? { ...i, ...next } : i)));
+  }
+
+  function handleRecenter() {
+    zoomRef.current = 1;
+    resetRef.current = true;
+  }
+
+  // Shortest-path angle so a user who's spun several full laps still reads
+  // as "off center" only by the visually meaningful remainder, not the raw
+  // accumulated total.
+  const yawShortest = (((orientation.yaw % 360) + 540) % 360) - 180;
+  const isOffCenter = Math.abs(yawShortest) > 1 || Math.abs(orientation.pitch) > 1 || Math.abs(zoomLevel - 1) > 0.03;
 
   const displayYaw = ((orientation.yaw % 360) + 360) % 360;
 
@@ -175,6 +245,11 @@ export default function TattooLabCanvas() {
           <div className="axis axis-y" />
           <div className="viewer-label label-top-left">Anterior study / 01</div>
           <div className="viewer-label label-top-right">{Math.round(displayYaw)}°</div>
+          {isOffCenter && (
+            <button className="recenter-button" onClick={handleRecenter}>
+              Recenter
+            </button>
+          )}
 
           <div className="figure-stage">
             <Canvas
@@ -187,15 +262,28 @@ export default function TattooLabCanvas() {
               <Suspense fallback={null}>
                 <BodyModel ref={bodyGroupRef} inks={inks} textures={textures} />
               </Suspense>
-              <AutoFrameCamera targetRef={bodyGroupRef} />
+              <CameraRig targetRef={bodyGroupRef} zoomRef={zoomRef} />
               <GroundShadowCatcher targetRef={bodyGroupRef} />
-              <PointerController bodyGroupRef={bodyGroupRef} setInks={setInks} selectedDesignIdRef={selectedDesignIdRef} />
+              <PointerController
+                bodyGroupRef={bodyGroupRef}
+                setInks={setInks}
+                selectedDesignIdRef={selectedDesignIdRef}
+                styleByDesignRef={styleByDesignRef}
+              />
               <RotationRig
                 groupRef={bodyGroupRef}
                 angularVelocityYRef={angularVelocityYRef}
                 angularVelocityXRef={angularVelocityXRef}
+                resetRef={resetRef}
               />
-              <RotationReadout groupRef={bodyGroupRef} onChange={(yaw, pitch) => setOrientation({ yaw, pitch })} />
+              <RotationReadout
+                groupRef={bodyGroupRef}
+                zoomRef={zoomRef}
+                onChange={(yaw, pitch, zoom) => {
+                  setOrientation({ yaw, pitch });
+                  setZoomLevel(zoom);
+                }}
+              />
             </Canvas>
           </div>
 
@@ -212,7 +300,14 @@ export default function TattooLabCanvas() {
           </div>
         </div>
 
-        <ControlPanel inks={inks} selectedId={selectedDesignId} yawDeg={orientation.yaw} onClear={() => setInks([])} />
+        <ControlPanel
+          inks={inks}
+          selectedId={selectedDesignId}
+          yawDeg={orientation.yaw}
+          style={activeStyle}
+          onStyleChange={handleStyleChange}
+          onClear={() => setInks([])}
+        />
       </section>
 
       <footer className="bottombar">

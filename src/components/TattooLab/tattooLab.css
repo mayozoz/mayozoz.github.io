@@ -322,6 +322,30 @@
 .label-top-left { left: 22px; }
 .label-top-right { right: 22px; }
 
+.recenter-button {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  padding: 7px 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(10,10,10,.78);
+  backdrop-filter: blur(10px);
+  color: #c9c7c0;
+  font: 400 8px/1 var(--font-mono), monospace;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.recenter-button:hover {
+  color: #101010;
+  background: var(--paper);
+  border-color: var(--paper);
+}
+
 .figure-stage {
   position: absolute;
   inset: 0;
@@ -425,6 +449,45 @@
   font-weight: 400;
   letter-spacing: .09em;
   text-transform: uppercase;
+}
+
+.style-sliders {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+}
+
+.style-slider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.style-slider input[type="range"] {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 4px;
+  height: 110px;
+  margin: 4px 0;
+  accent-color: var(--paper);
+  background: transparent;
+  cursor: pointer;
+}
+
+.style-slider-label {
+  color: var(--muted);
+  font: 400 8px/1 var(--font-mono), monospace;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.style-slider-value {
+  color: #999791;
+  font: 400 8px/1 var(--font-mono), monospace;
+  letter-spacing: .05em;
 }
 
 .measurements {

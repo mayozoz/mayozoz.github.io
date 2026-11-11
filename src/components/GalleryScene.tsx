@@ -1,64 +1,28 @@
 "use client";
 
-import { Suspense, useRef, useState, useMemo, useEffect } from "react";
+import { Suspense, useRef, useState, useEffect, useCallback } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
-  useGLTF,
   MeshReflectorMaterial,
   Environment,
   Float,
   Html,
   useAnimations,
 } from "@react-three/drei";
-import { SkeletonUtils } from "three-stdlib";
 import * as THREE from "three";
+import { models, useModelScene, type ModelEntry } from "@/components/galleryModels";
+import ModelViewer from "@/components/ModelViewer";
 
 const SPACING = 2.4;
-const OFFSET = ((7 - 1) / 2) * SPACING; // 7.2, derived from models.length
-
-type AnimMode =
-  | { type: "cycle" }
-  | { type: "loop"; name: string }
-  | { type: "first" }
-  | { type: "none" }
-
-const models = [
-  { file: "dew-drop_character.glb",    name: "Dew Drop",   scaleMult: 1.0, anim: { type: "cycle" } as AnimMode },
-  { file: "pebble_character.glb",      name: "Pebble",     scaleMult: 1.0, anim: { type: "loop", name: "Roll" } as AnimMode },
-  { file: "Fish.glb",                  name: "Fish",        scaleMult: 1.0, anim: { type: "first" } as AnimMode },
-  { file: "pink_bunny.glb",            name: "Pink Bunny",  scaleMult: 0.6, anim: { type: "first" } as AnimMode },
-  { file: "daily_model_2025-09-22.glb", name: "Sushi",      scaleMult: 1.0, anim: { type: "none" } as AnimMode },
-  { file: "daily_model_2025-09-26.glb", name: "Health Pot", scaleMult: 1.0, anim: { type: "none" } as AnimMode },
-  { file: "daily_model_2025-10-15.glb", name: "Regen Pot",  scaleMult: 1.0, anim: { type: "none" } as AnimMode },
-];
+const OFFSET = ((models.length - 1) / 2) * SPACING;
 
 const CAMERA_MIN_X = -OFFSET;
 const CAMERA_MAX_X =  OFFSET;
 
-function Model({ file, scaleMult, anim }: { file: string; scaleMult: number; anim: AnimMode }) {
-  const { scene: rawScene, animations } = useGLTF(`/glb_models/${file}`);
-  const scene = useMemo(() => SkeletonUtils.clone(rawScene), [rawScene]);
+function Model({ model }: { model: ModelEntry }) {
+  const { anim } = model;
+  const { scene, animations, modelScale, modelPos } = useModelScene(model);
   const { actions, names, mixer } = useAnimations(animations, scene);
-
-  const { modelScale, modelPos } = useMemo(() => {
-    const box = new THREE.Box3().setFromObject(scene);
-    const size = new THREE.Vector3();
-    const center = new THREE.Vector3();
-    box.getSize(size);
-    box.getCenter(center);
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const s = (maxDim > 0 ? 1.1 / maxDim : 1) * scaleMult;
-    return {
-      modelScale: s,
-      modelPos: [-center.x * s, -box.min.y * s, -center.z * s] as [number, number, number],
-    };
-  }, [scene, scaleMult]);
-
-  useEffect(() => {
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) (child as THREE.Mesh).castShadow = true;
-    });
-  }, [scene]);
 
   const cycleIndexRef = useRef(0);
   useEffect(() => {
@@ -114,20 +78,21 @@ function Model({ file, scaleMult, anim }: { file: string; scaleMult: number; ani
 function Pedestal({
   position,
   modelData,
-  index,
-  activeIndex,
   loaded,
-  onClick,
+  onOpen,
 }: {
   position: [number, number, number];
-  modelData: (typeof models)[0];
-  index: number;
-  activeIndex: number | null;
+  modelData: ModelEntry;
   loaded: boolean;
-  onClick: (i: number) => void;
+  onOpen: (model: ModelEntry) => void;
 }) {
-  const isActive = activeIndex === index;
-  const isDimmed = activeIndex !== null && !isActive;
+  const [hovered, setHovered] = useState(false);
+
+  useEffect(() => {
+    if (!hovered) return;
+    document.body.style.cursor = "pointer";
+    return () => { document.body.style.cursor = ""; };
+  }, [hovered]);
 
   return (
     <group position={position}>
@@ -139,8 +104,6 @@ function Pedestal({
           transmission={0.7}
           thickness={0.5}
           ior={1.5}
-          opacity={isDimmed ? 0.3 : 1}
-          transparent
         />
       </mesh>
       <mesh position={[0, -0.22, 0]}>
@@ -151,34 +114,32 @@ function Pedestal({
           transmission={0.8}
           thickness={0.3}
           ior={1.4}
-          opacity={isDimmed ? 0.3 : 1}
-          transparent
         />
       </mesh>
 
       <group
         position={[0, 0.12, 0]}
-        onClick={(e) => { e.stopPropagation(); onClick(index); }}
+        onClick={(e) => { e.stopPropagation(); onOpen(modelData); }}
+        onPointerOver={(e) => { e.stopPropagation(); setHovered(true); }}
+        onPointerOut={() => setHovered(false)}
       >
-        <Float speed={1.2} floatIntensity={isActive ? 0.5 : 0.2} rotationIntensity={0.05}>
+        <Float speed={1.2} floatIntensity={hovered ? 0.5 : 0.2} rotationIntensity={0.05}>
           {loaded && (
             <Suspense fallback={null}>
-              <Model file={modelData.file} scaleMult={modelData.scaleMult} anim={modelData.anim} />
+              <Model model={modelData} />
             </Suspense>
           )}
         </Float>
       </group>
 
-      {!isDimmed && (
-        <Html center position={[0, -0.58, 0]} distanceFactor={6}>
-          <div
-            className="text-center whitespace-nowrap text-[11px] tracking-widest uppercase text-[#1a3326]/50 pointer-events-none select-none"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            {modelData.name}
-          </div>
-        </Html>
-      )}
+      <Html center position={[0, -0.58, 0]} distanceFactor={6} zIndexRange={[10, 0]}>
+        <div
+          className="text-center whitespace-nowrap text-[11px] tracking-widest uppercase text-[#1a3326]/50 pointer-events-none select-none"
+          style={{ fontFamily: "var(--font-mono)" }}
+        >
+          {modelData.name}
+        </div>
+      </Html>
     </group>
   );
 }
@@ -212,9 +173,7 @@ function GalleryFloor() {
   );
 }
 
-function GalleryContent({ targetX }: { targetX: number }) {
-  const [active, setActive] = useState<number | null>(null);
-
+function GalleryContent({ targetX, onOpen }: { targetX: number; onOpen: (model: ModelEntry) => void }) {
   // Track which model indices have ever been within view — once loaded, stay loaded
   const [loadedIndices, setLoadedIndices] = useState<Set<number>>(() => new Set([2, 3, 4]));
 
@@ -246,10 +205,8 @@ function GalleryContent({ targetX }: { targetX: number }) {
           key={m.file}
           position={[i * SPACING - OFFSET, 0, 0]}
           modelData={m}
-          index={i}
-          activeIndex={active}
           loaded={loadedIndices.has(i)}
-          onClick={(idx) => setActive(active === idx ? null : idx)}
+          onOpen={onOpen}
         />
       ))}
     </>
@@ -259,6 +216,8 @@ function GalleryContent({ targetX }: { targetX: number }) {
 export default function GalleryScene() {
   const [targetX, setTargetX] = useState(0);
   const [inView, setInView] = useState(false);
+  const [viewing, setViewing] = useState<ModelEntry | null>(null);
+  const closeViewer = useCallback(() => setViewing(null), []);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Don't mount the Canvas until the section scrolls near the viewport
@@ -313,8 +272,9 @@ export default function GalleryScene() {
               shadows
               gl={{ antialias: true }}
               style={{ background: "transparent" }}
+              frameloop={viewing ? "never" : "always"}
             >
-              <GalleryContent targetX={targetX} />
+              <GalleryContent targetX={targetX} onOpen={setViewing} />
             </Canvas>
           ) : (
             <div className="w-full h-full flex items-center justify-center">
@@ -336,8 +296,9 @@ export default function GalleryScene() {
       </div>
 
       <p className="text-[13px] text-[#1a3326]/40 mt-4 text-center" style={{ fontFamily: "var(--font-mono)" }}>
-        scroll or use arrows · click a model to focus
+        scroll or use arrows · click a model to view
       </p>
+      {viewing && <ModelViewer key={viewing.file} model={viewing} onClose={closeViewer} />}
     </section>
   );
 }

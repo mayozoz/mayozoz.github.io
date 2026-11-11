@@ -3,13 +3,14 @@
 import { useEffect, type Dispatch, type MutableRefObject, type RefObject, type SetStateAction } from "react";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import type { PlacedInk } from "./types";
+import { DEFAULT_INK_STYLE, type PlacedInk } from "./types";
 import type { FlashId } from "./tattooDesigns";
 
 type Props = {
   bodyGroupRef: RefObject<THREE.Group | null>;
   setInks: Dispatch<SetStateAction<PlacedInk[]>>;
   selectedDesignIdRef: MutableRefObject<FlashId | null>;
+  styleByDesignRef: MutableRefObject<Partial<Record<FlashId, { size: number; opacity: number }>>>;
 };
 
 // Pointer drags are reserved entirely for ink — rotation is a separate,
@@ -18,7 +19,7 @@ type Props = {
 // Pressing on the body places (or re-grabs) the selected design and follows
 // the cursor live until release; pressing directly on an existing decal
 // grabs that one instead, regardless of what's currently selected.
-export default function PointerController({ bodyGroupRef, setInks, selectedDesignIdRef }: Props) {
+export default function PointerController({ bodyGroupRef, setInks, selectedDesignIdRef, styleByDesignRef }: Props) {
   const { camera, gl, raycaster } = useThree();
 
   useEffect(() => {
@@ -47,7 +48,8 @@ export default function PointerController({ bodyGroupRef, setInks, selectedDesig
       setInks((prev) => {
         const idx = prev.findIndex((i) => i.design === design);
         if (idx === -1) {
-          return [...prev, { design, localPosition, seed: Math.random() * Math.PI * 2, visible: true }];
+          const style = styleByDesignRef.current[design] ?? DEFAULT_INK_STYLE;
+          return [...prev, { design, localPosition, seed: Math.random() * Math.PI * 2, visible: true, ...style }];
         }
         const next = [...prev];
         next[idx] = { ...next[idx], localPosition, visible: true };
@@ -110,7 +112,7 @@ export default function PointerController({ bodyGroupRef, setInks, selectedDesig
       dom.removeEventListener("pointerup", endDrag);
       dom.removeEventListener("pointercancel", endDrag);
     };
-  }, [camera, gl, raycaster, bodyGroupRef, setInks, selectedDesignIdRef]);
+  }, [camera, gl, raycaster, bodyGroupRef, setInks, selectedDesignIdRef, styleByDesignRef]);
 
   return null;
 }

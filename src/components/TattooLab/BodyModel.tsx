@@ -80,8 +80,9 @@ const BodyModel = forwardRef<THREE.Group, Props>(function BodyModel({ inks, text
             userData={{ design: ink.design }}
             position={ink.localPosition}
             rotation={ink.seed}
-            scale={decalScale}
+            scale={[decalScale[0] * ink.size, decalScale[1] * ink.size, decalScale[2] * ink.size]}
             map={textures.get(ink.design)}
+            material-opacity={ink.opacity}
             depthTest
           />
         ))}

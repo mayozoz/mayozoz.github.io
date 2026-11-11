@@ -101,7 +101,7 @@ export const projects: Project[] = [
     youtubeId: "h0L87jKw6r4",
     description:
       "First in a series of AI-produced short films for fictional fragrance concepts. Directed the visual language, wrote structured scene prompts, and orchestrated the image-to-video pipeline from reference frames through final edit. Looking to build this into a recurring format.",
-    stack: ["Kling 3.0 Omni", "ElevenLabs", "DaVinci Resolve"],
+    stack: ["Kling 3.0 Omni", "ComfyUI", "Google Flow", "ElevenLabs", "CapCut"],
   },
   {
     slug: "game-engine",
